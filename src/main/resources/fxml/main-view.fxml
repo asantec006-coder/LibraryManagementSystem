@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.library.controller.MainController"
+      spacing="16"
+      styleClass="root"
+      stylesheets="@../css/styles.css"
+      prefWidth="1100"
+      prefHeight="700">
+    <children>
+        <Label text="Library Management System" styleClass="title-label"/>
+
+        <TabPane VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab text="Books">
+                    <content>
+                        <fx:include source="books-view.fxml"/>
+                    </content>
+                </Tab>
+
+                <Tab text="Members">
+                    <content>
+                        <fx:include source="members-view.fxml"/>
+                    </content>
+                </Tab>
+
+                <Tab text="Loans">
+                    <content>
+                        <VBox spacing="15" styleClass="form-panel">
+                            <children>
+                                <Label text="Issue / Return Books" styleClass="section-label"/>
+                                <ComboBox fx:id="issueBookComboBox" promptText="Select a book" prefWidth="300"/>
+                                <ComboBox fx:id="issueMemberComboBox" promptText="Select a member" prefWidth="300"/>
+                                <HBox spacing="10">
+                                    <children>
+                                        <Button text="Issue Book" onAction="#handleIssueBook"/>
+                                        <Button text="Return Book" onAction="#handleReturnBook"/>
+                                    </children>
+                                </HBox>
+                                <Label fx:id="loanStatusLabel" text="Select a book and member to issue a loan." styleClass="status-label"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.ReturnController"
+      stylesheets="@../css/common.css,@../css/return.css" styleClass="app-root">
+
+    <fx:include fx:id="sidebar" source="common/Sidebar.fxml" HBox.hgrow="NEVER"/>
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include fx:id="topBar" source="common/TopBar.fxml"/>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="page-content" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <HBox spacing="20">
+                <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+                <VBox styleClass="content-card" spacing="14" HBox.hgrow="ALWAYS" minWidth="380">
+                    <Label text="Find Borrowing Record" styleClass="section-title"/>
+                    <TextField fx:id="searchField" promptText="Search by record ID, member name, or book title..."/>
+                    <Label fx:id="activeCountLabel" text="6 active borrowings" styleClass="section-subtitle"/>
+                    <VBox fx:id="activeBorrowingsBox" spacing="14"/>
+                </VBox>
+
+                <VBox spacing="20" prefWidth="340" minWidth="260" HBox.hgrow="SOMETIMES">
+                    <GridPane hgap="16" vgap="16">
+                        <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                            <Label fx:id="activeBorrowsLabel" text="6" styleClass="stat-value" style="-fx-text-fill: #2563eb;"/>
+                            <Label text="Active Borrows" styleClass="stat-label"/>
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                            <Label fx:id="overdueLabel" text="1" styleClass="stat-value" style="-fx-text-fill: #dc2626;"/>
+                            <Label text="Overdue" styleClass="stat-label"/>
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                            <Label fx:id="returnedTodayLabel" text="3" styleClass="stat-value" style="-fx-text-fill: #16a34a;"/>
+                            <Label text="Returned Today" styleClass="stat-label"/>
+                        </VBox>
+                        <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                            <Label fx:id="finesLabel" text="$12.50" styleClass="stat-value" style="-fx-text-fill: #d97706;"/>
+                            <Label text="Fines Collected" styleClass="stat-label"/>
+                        </VBox>
+                    </GridPane>
+
+                    <VBox styleClass="content-card" spacing="12">
+                        <Label text="Recent Returns" styleClass="section-title"/>
+                        <VBox fx:id="recentReturnsBox" spacing="14"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </ScrollPane>
+    </VBox>
+</HBox>

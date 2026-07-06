@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.BorrowController"
+      stylesheets="@../css/common.css,@../css/borrow.css" styleClass="app-root">
+
+    <fx:include fx:id="sidebar" source="common/Sidebar.fxml" HBox.hgrow="NEVER"/>
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include fx:id="topBar" source="common/TopBar.fxml"/>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="page-content" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <HBox spacing="20">
+                <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+                <VBox styleClass="content-card" spacing="16" HBox.hgrow="ALWAYS" minWidth="380">
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128209;"/></StackPane>
+                        <VBox>
+                            <Label text="Issue a Book" styleClass="section-title"/>
+                            <Label text="Fill in the details to borrow a book" styleClass="section-subtitle"/>
+                        </VBox>
+                    </HBox>
+                    <Separator/>
+
+                    <Label text="Member" styleClass="form-label"/>
+                    <TextField fx:id="memberSearchField" promptText="Search member by name or ID..."/>
+                    <ComboBox fx:id="memberCombo" promptText="Select a member" maxWidth="Infinity"/>
+
+                    <Label text="Book" styleClass="form-label"/>
+                    <TextField fx:id="bookSearchField" promptText="Search by title, author, or ISBN..."/>
+                    <ComboBox fx:id="bookCombo" promptText="Select a book" maxWidth="Infinity"/>
+
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Issue Date" styleClass="form-label"/>
+                            <DatePicker fx:id="issueDatePicker" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Due Date" styleClass="form-label"/>
+                            <DatePicker fx:id="dueDatePicker" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+
+                    <Button text="Issue Book" onAction="#onIssue" styleClass="btn-primary" maxWidth="Infinity"
+                            style="-fx-padding: 12; -fx-font-size: 13px;"/>
+                </VBox>
+
+                <VBox spacing="20" prefWidth="340" minWidth="260" HBox.hgrow="SOMETIMES">
+                    <VBox styleClass="borrow-policy-box" spacing="10">
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="&#9888;" style="-fx-text-fill: #b45309;"/>
+                            <Label text="Borrowing Policy" styleClass="borrow-policy-title"/>
+                        </HBox>
+                        <Label text="• Standard members: max 3 books" styleClass="borrow-policy-item" wrapText="true"/>
+                        <Label text="• Premium members: max 5 books" styleClass="borrow-policy-item" wrapText="true"/>
+                        <Label text="• Students: max 4 books" styleClass="borrow-policy-item" wrapText="true"/>
+                        <Label text="• Maximum loan period: 60 days" styleClass="borrow-policy-item" wrapText="true"/>
+                        <Label text="• Late fee: $0.50/day per book" styleClass="borrow-policy-item" wrapText="true"/>
+                    </VBox>
+
+                    <VBox styleClass="content-card" spacing="12">
+                        <Label text="Recently Issued" styleClass="section-title"/>
+                        <VBox fx:id="recentlyIssuedBox" spacing="14"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </ScrollPane>
+    </VBox>
+</HBox>

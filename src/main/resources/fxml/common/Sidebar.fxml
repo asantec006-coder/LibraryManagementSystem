@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.common.SidebarController"
+      styleClass="sidebar">
+
+    <!-- Brand -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <padding><Insets top="24" right="20" bottom="20" left="20"/></padding>
+        <StackPane styleClass="sidebar-brand-box">
+            <Text text="&#128218;" style="-fx-font-size: 16px;"/>
+        </StackPane>
+        <VBox>
+            <Label text="LibraryMS" styleClass="sidebar-brand-name"/>
+            <Label text="Management System" styleClass="sidebar-brand-subtitle"/>
+        </VBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="sidebar-scroll">
+        <VBox spacing="4">
+            <padding><Insets top="0" right="14" bottom="14" left="14"/></padding>
+
+            <Label text="MAIN MENU" styleClass="sidebar-section-label">
+                <VBox.margin><Insets left="6" bottom="6" top="6"/></VBox.margin>
+            </Label>
+
+            <Button fx:id="dashboardBtn" text="Dashboard" onAction="#goToDashboard"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
+            <Button fx:id="booksBtn" text="Books" onAction="#goToBooks"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
+            <Button fx:id="membersBtn" text="Members" onAction="#goToMembers"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
+
+            <Button fx:id="borrowBtn" onAction="#goToBorrow" styleClass="sidebar-item" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Borrow Book"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="3" styleClass="sidebar-badge"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="returnBtn" text="Return Book" onAction="#goToReturn"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
+
+            <Separator styleClass="sidebar-divider">
+                <VBox.margin><Insets top="10" bottom="6"/></VBox.margin>
+            </Separator>
+
+            <Label text="ANALYTICS" styleClass="sidebar-section-label">
+                <VBox.margin><Insets left="6" bottom="6" top="6"/></VBox.margin>
+            </Label>
+
+            <Button fx:id="reportsBtn" text="Reports" onAction="#goToReports"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
+            <Button fx:id="settingsBtn" text="Settings" onAction="#goToSettings"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
+        </VBox>
+    </ScrollPane>
+
+    <Separator styleClass="sidebar-divider"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sidebar-footer">
+        <StackPane styleClass="sidebar-avatar">
+            <Label text="AL" styleClass="sidebar-avatar-text"/>
+        </StackPane>
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Admin Librarian" styleClass="sidebar-user-name"/>
+            <Label text="admin@library.com" styleClass="sidebar-user-email"/>
+        </VBox>
+        <Button text="&#8674;" styleClass="icon-btn" onAction="#logout"
+                style="-fx-text-fill: #94a3b8; -fx-font-size: 14px;"/>
+    </HBox>
+
+</VBox>

@@ -1,0 +1,3 @@
+/* Reports screen currently reuses common.css tokens (stat-card, content-card,
+   section-title, etc.) — this file is here for future report-specific
+   styling (e.g. custom chart colors) without touching common.css. */

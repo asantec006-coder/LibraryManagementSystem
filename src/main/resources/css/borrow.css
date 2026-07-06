@@ -1,0 +1,41 @@
+.form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.borrow-policy-box {
+    -fx-background-color: #fef9e7;
+    -fx-background-radius: 12px;
+    -fx-border-color: #fde68a;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-padding: 18;
+}
+
+.borrow-policy-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #92400e;
+}
+
+.borrow-policy-item {
+    -fx-font-size: 12px;
+    -fx-text-fill: #92400e;
+}
+
+.recent-item-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.recent-item-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
+
+.recent-item-date {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9ca3af;
+}

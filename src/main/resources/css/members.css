@@ -1,0 +1,35 @@
+.member-avatar {
+    -fx-background-radius: 50%;
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-max-width: 36px;
+    -fx-max-height: 36px;
+    -fx-alignment: center;
+}
+
+.member-avatar-text {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.member-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.member-id {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9ca3af;
+}
+
+.member-contact-line {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4b5563;
+}
+
+.avatar-blue   { -fx-background-color: #2563eb; }
+.avatar-purple { -fx-background-color: #7e22ce; }
+.avatar-green  { -fx-background-color: #16a34a; }
+.avatar-orange { -fx-background-color: #ea580c; }

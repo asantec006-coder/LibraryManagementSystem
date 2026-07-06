@@ -1,0 +1,131 @@
+.login-left-panel {
+    -fx-background-color: linear-gradient(to bottom right, #0f1729, #16213e);
+}
+
+.login-brand-name {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.login-brand-subtitle {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+}
+
+.login-headline {
+    -fx-text-fill: white;
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+}
+
+.login-headline-accent {
+    -fx-text-fill: #60a5fa;
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+}
+
+.login-description {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 13px;
+    -fx-max-width: 380px;
+}
+
+.login-feature-icon {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 10px;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-alignment: center;
+}
+
+.login-feature-title {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.login-feature-subtitle {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+}
+
+.login-copyright {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 10px;
+}
+
+.login-right-panel {
+    -fx-background-color: white;
+    -fx-padding: 40;
+}
+
+.login-form-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.login-form-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7280;
+}
+
+.login-field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.login-input {
+    -fx-pref-height: 44px;
+    -fx-background-color: #f9fafb;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #e5e7eb;
+    -fx-padding: 0 12 0 12;
+}
+
+.login-input:focused {
+    -fx-border-color: #2563eb;
+}
+
+.login-forgot-link {
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 12px;
+}
+
+.login-checkbox {
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+}
+
+.login-divider-text {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 11px;
+    -fx-alignment: center;
+}
+
+.login-demo-box {
+    -fx-background-color: #eff6ff;
+    -fx-background-radius: 8px;
+    -fx-padding: 14;
+}
+
+.login-demo-title {
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.login-demo-text {
+    -fx-text-fill: #3b82f6;
+    -fx-font-size: 11px;
+}
+
+.login-error-text {
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 12px;
+}

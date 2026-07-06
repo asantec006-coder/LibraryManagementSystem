@@ -1,0 +1,23 @@
+.settings-tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: #374151;
+    -fx-font-size: 13px;
+    -fx-alignment: center-left;
+    -fx-padding: 10 14 10 14;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.settings-tab:hover {
+    -fx-background-color: #f3f4f6;
+}
+
+.settings-tab-active {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #2563eb;
+    -fx-font-weight: bold;
+}
+
+.settings-tab-active:hover {
+    -fx-background-color: #eff6ff;
+}

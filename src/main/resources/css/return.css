@@ -1,0 +1,26 @@
+.active-borrow-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.active-borrow-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
+
+.active-borrow-due {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9ca3af;
+}
+
+.return-item-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.return-item-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}

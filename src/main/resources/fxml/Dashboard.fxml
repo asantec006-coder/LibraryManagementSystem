@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.DashboardController"
+      stylesheets="@../css/common.css,@../css/dashboard.css" styleClass="app-root">
+
+    <fx:include fx:id="sidebar" source="common/Sidebar.fxml" HBox.hgrow="NEVER"/>
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include fx:id="topBar" source="common/TopBar.fxml"/>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="page-content" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <VBox spacing="20">
+                <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+                <!-- Stat cards -->
+                <HBox spacing="20">
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
+                        <HBox alignment="CENTER_LEFT">
+                            <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128218;"/></StackPane>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="↗ +124 this month" styleClass="trend-up"/>
+                        </HBox>
+                        <Label text="12,480" styleClass="stat-value"/>
+                        <Label text="Total Books" styleClass="stat-label"/>
+                    </VBox>
+
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
+                        <HBox alignment="CENTER_LEFT">
+                            <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#128101;"/></StackPane>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="↗ +48 this month" styleClass="trend-up"/>
+                        </HBox>
+                        <Label text="3,241" styleClass="stat-value"/>
+                        <Label text="Active Members" styleClass="stat-label"/>
+                    </VBox>
+
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
+                        <HBox alignment="CENTER_LEFT">
+                            <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128209;"/></StackPane>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="↗ +62 this month" styleClass="trend-up"/>
+                        </HBox>
+                        <Label text="847" styleClass="stat-value"/>
+                        <Label text="Books Borrowed" styleClass="stat-label"/>
+                    </VBox>
+
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
+                        <HBox alignment="CENTER_LEFT">
+                            <StackPane styleClass="stat-icon-box stat-icon-red"><Text text="&#9888;"/></StackPane>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="↘ -5 this month" styleClass="trend-down"/>
+                        </HBox>
+                        <Label text="23" styleClass="stat-value"/>
+                        <Label text="Overdue Books" styleClass="stat-label"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Chart row -->
+                <HBox spacing="20">
+                    <VBox styleClass="content-card" HBox.hgrow="ALWAYS" spacing="10" minWidth="320">
+                        <HBox alignment="CENTER_LEFT">
+                            <VBox>
+                                <Label text="Borrowing Trend" styleClass="section-title"/>
+                                <Label text="Books borrowed vs returned — 2026" styleClass="section-subtitle"/>
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <ComboBox fx:id="rangeCombo" promptText="Last 7 months"/>
+                        </HBox>
+                        <LineChart fx:id="trendChart" legendVisible="false" createSymbols="false"
+                                   VBox.vgrow="ALWAYS" prefHeight="280">
+                            <xAxis><CategoryAxis fx:id="trendXAxis"/></xAxis>
+                            <yAxis><NumberAxis fx:id="trendYAxis"/></yAxis>
+                        </LineChart>
+                    </VBox>
+
+                    <VBox styleClass="content-card" prefWidth="340" minWidth="260" HBox.hgrow="SOMETIMES" spacing="14">
+                        <Label text="Popular Categories" styleClass="section-title"/>
+                        <Label text="Most borrowed this month" styleClass="section-subtitle"/>
+                        <VBox fx:id="categoryBarsBox" spacing="14">
+                            <VBox.margin><Insets top="10"/></VBox.margin>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</HBox>

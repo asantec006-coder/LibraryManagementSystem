@@ -1,0 +1,17 @@
+.category-bar-track {
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 4px;
+    -fx-pref-height: 10px;
+}
+
+.category-bar-fill {
+    -fx-background-color: #2563eb;
+    -fx-background-radius: 4px;
+    -fx-pref-height: 10px;
+}
+
+.category-bar-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+    -fx-pref-width: 60px;
+}

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.ReportsController"
+      stylesheets="@../css/common.css,@../css/reports.css" styleClass="app-root">
+
+    <fx:include fx:id="sidebar" source="common/Sidebar.fxml" HBox.hgrow="NEVER"/>
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include fx:id="topBar" source="common/TopBar.fxml"/>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="page-content" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <VBox spacing="20">
+                <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+                <HBox alignment="CENTER_LEFT">
+                    <ComboBox fx:id="rangeCombo" promptText="This Year (2026)"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="&#8681; Export Report" onAction="#onExport" styleClass="btn-secondary"/>
+                </HBox>
+
+                <HBox spacing="20">
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128218;"/></StackPane>
+                        <Label text="734" styleClass="stat-value"/>
+                        <Label text="Avg Books/Month" styleClass="stat-label"/>
+                        <Label text="+8.2% vs last year" styleClass="stat-sublabel"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#128101;"/></StackPane>
+                        <Label text="+141" styleClass="stat-value"/>
+                        <Label text="Member Growth" styleClass="stat-label"/>
+                        <Label text="New members in 2026" styleClass="stat-sublabel"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128200;"/></StackPane>
+                        <Label text="96.4%" styleClass="stat-value"/>
+                        <Label text="Return Rate" styleClass="stat-label"/>
+                        <Label text="Books returned on time" styleClass="stat-sublabel"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                        <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#9888;"/></StackPane>
+                        <Label text="$270" styleClass="stat-value"/>
+                        <Label text="Total Fines" styleClass="stat-label"/>
+                        <Label text="Collected this year" styleClass="stat-sublabel"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="20">
+                    <VBox styleClass="content-card" HBox.hgrow="ALWAYS" spacing="10" minWidth="320">
+                        <Label text="Monthly Borrowing Activity" styleClass="section-title"/>
+                        <Label text="Books borrowed and returned per month" styleClass="section-subtitle"/>
+                        <LineChart fx:id="activityChart" legendVisible="false" createSymbols="false"
+                                   VBox.vgrow="ALWAYS" prefHeight="280">
+                            <xAxis><CategoryAxis/></xAxis>
+                            <yAxis><NumberAxis/></yAxis>
+                        </LineChart>
+                    </VBox>
+
+                    <VBox styleClass="content-card" prefWidth="340" minWidth="260" HBox.hgrow="SOMETIMES" spacing="10">
+                        <Label text="By Category" styleClass="section-title"/>
+                        <Label text="Distribution of borrowed books" styleClass="section-subtitle"/>
+                        <PieChart fx:id="categoryPieChart" legendVisible="true" VBox.vgrow="ALWAYS" prefHeight="280"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</HBox>

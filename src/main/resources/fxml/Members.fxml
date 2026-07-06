@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.MembersController"
+      stylesheets="@../css/common.css,@../css/members.css" styleClass="app-root">
+
+    <fx:include fx:id="sidebar" source="common/Sidebar.fxml" HBox.hgrow="NEVER"/>
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include fx:id="topBar" source="common/TopBar.fxml"/>
+
+        <VBox spacing="20" styleClass="page-content" VBox.vgrow="ALWAYS">
+            <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+            <HBox spacing="20">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                    <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128101;"/></StackPane>
+                    <Label text="8" styleClass="stat-value"/>
+                    <Label text="Total Members" styleClass="stat-label"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                    <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#10003;"/></StackPane>
+                    <Label text="6" styleClass="stat-value"/>
+                    <Label text="Active Members" styleClass="stat-label"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                    <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128218;"/></StackPane>
+                    <Label text="17" styleClass="stat-value"/>
+                    <Label text="Books Currently Out" styleClass="stat-label"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
+                    <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#10024;"/></StackPane>
+                    <Label text="3" styleClass="stat-value"/>
+                    <Label text="New This Month" styleClass="stat-label"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search members..." HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="filterCombo" promptText="All"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Add Member" onAction="#onAdd" styleClass="btn-primary"/>
+            </HBox>
+
+            <TableView fx:id="memberTable" styleClass="data-table" VBox.vgrow="ALWAYS" minHeight="240">
+                <columns>
+                    <TableColumn fx:id="memberColumn" text="MEMBER" prefWidth="220" minWidth="160"/>
+                    <TableColumn fx:id="contactColumn" text="CONTACT" prefWidth="220" minWidth="160"/>
+                    <TableColumn fx:id="joinedColumn" text="JOINED" prefWidth="110" minWidth="90"/>
+                    <TableColumn fx:id="borrowedColumn" text="BORROWED" prefWidth="100" minWidth="90"/>
+                    <TableColumn fx:id="typeColumn" text="TYPE" prefWidth="100" minWidth="90"/>
+                    <TableColumn fx:id="statusColumn" text="STATUS" prefWidth="100" minWidth="90"/>
+                    <TableColumn fx:id="actionsColumn" text="ACTIONS" prefWidth="120" minWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</HBox>

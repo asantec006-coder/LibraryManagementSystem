@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.SettingsController"
+      stylesheets="@../css/common.css,@../css/settings.css" styleClass="app-root">
+
+    <fx:include fx:id="sidebar" source="common/Sidebar.fxml" HBox.hgrow="NEVER"/>
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include fx:id="topBar" source="common/TopBar.fxml"/>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="page-content" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <HBox spacing="20">
+                <padding><Insets top="20" right="30" bottom="30" left="30"/></padding>
+
+                <VBox styleClass="content-card" spacing="4" prefWidth="240">
+                    <Button fx:id="generalTabBtn" text="General" onAction="#showGeneral"
+                            styleClass="settings-tab settings-tab-active" maxWidth="Infinity"/>
+                    <Button fx:id="notificationsTabBtn" text="Notifications" onAction="#showNotifications"
+                            styleClass="settings-tab" maxWidth="Infinity"/>
+                    <Button fx:id="securityTabBtn" text="Security" onAction="#showSecurity"
+                            styleClass="settings-tab" maxWidth="Infinity"/>
+                    <Button fx:id="backupTabBtn" text="Backup" onAction="#showBackup"
+                            styleClass="settings-tab" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox spacing="20" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="content-card" spacing="14">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128218;"/></StackPane>
+                            <VBox>
+                                <Label text="Library Information" styleClass="section-title"/>
+                                <Label text="Basic library details and contact" styleClass="section-subtitle"/>
+                            </VBox>
+                        </HBox>
+
+                        <Label text="Library Name" styleClass="form-label"/>
+                        <TextField fx:id="libraryNameField" text="City Public Library"/>
+
+                        <Label text="Address" styleClass="form-label"/>
+                        <TextField fx:id="addressField" text="123 Main Street, Springfield"/>
+
+                        <HBox spacing="16">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Email" styleClass="form-label"/>
+                                <TextField fx:id="emailField" text="contact@citylibrary.org"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                <Label text="Phone" styleClass="form-label"/>
+                                <TextField fx:id="phoneField" text="+1 555-0100"/>
+                            </VBox>
+                        </HBox>
+
+                        <Button text="Save Changes" onAction="#onSave" styleClass="btn-primary"/>
+                    </VBox>
+
+                    <VBox styleClass="content-card" spacing="14">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128101;"/></StackPane>
+                            <VBox>
+                                <Label text="Borrowing Policies" styleClass="section-title"/>
+                                <Label text="Loan limits and fine settings" styleClass="section-subtitle"/>
+                            </VBox>
+                        </HBox>
+                        <Label text="Loan limits and fine settings will appear here (see Borrow screen policy box for current values)."
+                               wrapText="true" styleClass="section-subtitle"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </ScrollPane>
+    </VBox>
+</HBox>

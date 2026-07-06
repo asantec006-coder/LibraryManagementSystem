@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.common.TopBarController"
+      styleClass="topbar" alignment="CENTER_LEFT" spacing="20">
+    <padding><Insets top="18" right="30" bottom="18" left="30"/></padding>
+
+    <VBox>
+        <Label fx:id="titleLabel" text="Page Title" styleClass="page-header-title"/>
+        <Label fx:id="subtitleLabel" text="Page subtitle" styleClass="page-header-subtitle"/>
+    </VBox>
+
+    <Region HBox.hgrow="ALWAYS"/>
+
+    <TextField fx:id="searchField" promptText="Search books, members..." styleClass="topbar-search"/>
+
+    <StackPane styleClass="topbar-icon-btn">
+        <Label text="&#128276;" style="-fx-font-size: 14px;"/>
+        <StackPane styleClass="topbar-badge" StackPane.alignment="TOP_RIGHT">
+            <Label text="4" style="-fx-text-fill: white; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+        </StackPane>
+    </StackPane>
+
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <StackPane styleClass="topbar-avatar">
+            <Label text="AL" styleClass="topbar-avatar-text"/>
+        </StackPane>
+        <Label text="Admin" styleClass="topbar-username"/>
+    </HBox>
+
+</HBox>
