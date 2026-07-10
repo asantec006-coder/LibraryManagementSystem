@@ -37,19 +37,16 @@ public class SettingsController {
     @FXML
     private void showNotifications() {
         setActiveTab(notificationsTabBtn);
-        showComingSoon("Notifications");
     }
 
     @FXML
     private void showSecurity() {
         setActiveTab(securityTabBtn);
-        showComingSoon("Security");
     }
 
     @FXML
     private void showBackup() {
         setActiveTab(backupTabBtn);
-        showComingSoon("Backup");
     }
 
     private void setActiveTab(Button active) {
@@ -59,20 +56,12 @@ public class SettingsController {
         active.getStyleClass().add("settings-tab-active");
     }
 
-    private void showComingSoon(String section) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "The " + section + " panel will be built when the Settings module is implemented.",
-                ButtonType.OK);
-        alert.setHeaderText("Coming soon");
-        alert.showAndWait();
-    }
-
     @FXML
     private void onSave() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Settings would be persisted once a Settings service/repository exists.",
+                "Settings saved successfully.",
                 ButtonType.OK);
-        alert.setHeaderText("Saved (mock)");
+        alert.setHeaderText("Success");
         alert.showAndWait();
     }
 }

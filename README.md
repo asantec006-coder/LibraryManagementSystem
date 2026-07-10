@@ -8,7 +8,7 @@ A complete JavaFX desktop application for managing books, members, and book loan
 - Add, view, update, and delete members
 - Issue and return books
 - Search books and members
-- Embedded H2 database with automatic initialization
+- Embedded SQLite database with automatic initialization
 - Clean JavaFX UI with FXML and CSS styling
 
 ## Tech Stack
@@ -16,7 +16,7 @@ A complete JavaFX desktop application for managing books, members, and book loan
 - Java 25
 - JavaFX 21
 - Maven
-- H2 Database
+- SQLite Database
 - JUnit 5
 
 ## Project Structure

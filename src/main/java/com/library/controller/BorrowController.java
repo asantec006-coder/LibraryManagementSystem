@@ -2,85 +2,171 @@ package com.library.controller;
 
 import com.library.controller.common.SidebarController;
 import com.library.controller.common.TopBarController;
+import com.library.model.Book;
+import com.library.model.Loan;
+import com.library.model.Member;
+import com.library.service.LoanService;
+import com.library.service.BookService;
+import com.library.service.MemberService;
+import com.library.repository.LoanRepository;
+import com.library.repository.BookRepository;
+import com.library.repository.MemberRepository;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
- * Controller for Borrow.fxml. Visual/static prototype: dropdowns are
- * populated with mock names, and "Issue Book" just confirms the action
- * rather than writing a real BorrowTransaction. When the Borrow Module
- * is built, wire this to BorrowService.issueBook(memberId, bookId, ...).
+ * Controller for Borrow.fxml. Backed by real data via LibraryService —
+ * dropdowns list actual available books and existing members, and
+ * "Issue Book" creates a real Loan row and decrements availability.
  */
 public class BorrowController {
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MMM d, yyyy");
+
+    private final BookService bookService = new BookService(new BookRepository());
+    private final MemberService memberService = new MemberService(new MemberRepository());
+    private final LoanService loanService = new LoanService(new LoanRepository(), bookService, memberService);
 
     @FXML private SidebarController sidebarController;
     @FXML private TopBarController topBarController;
 
-    @FXML private ComboBox<String> memberCombo;
-    @FXML private ComboBox<String> bookCombo;
+    @FXML private ComboBox<Member> memberCombo;
+    @FXML private ComboBox<Book> bookCombo;
     @FXML private DatePicker issueDatePicker;
     @FXML private DatePicker dueDatePicker;
     @FXML private VBox recentlyIssuedBox;
-
-    private record RecentIssue(String title, String borrower, String issueDate, String dueDate) {
-    }
 
     @FXML
     public void initialize() {
         sidebarController.setActive(SidebarController.NavItem.BORROW);
         topBarController.setTitle("Borrow Book", "Issue books to members");
 
-        memberCombo.setItems(FXCollections.observableArrayList(
-                "Emily Chen (M001)", "James Wilson (M002)", "Sarah Johnson (M003)", "Daniel Martinez (M004)"));
-        bookCombo.setItems(FXCollections.observableArrayList(
-                "The Pragmatic Programmer", "Atomic Habits", "Clean Code", "1984"));
+        memberCombo.setConverter(new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(Member m) {
+                return m == null ? "" : m.getName() + " (M" + String.format("%03d", m.getId()) + ")";
+            }
+            @Override
+            public Member fromString(String s) {
+                return null;
+            }
+        });
+        memberCombo.setCellFactory(list -> new javafx.scene.control.ListCell<>() {
+            @Override
+            protected void updateItem(Member m, boolean empty) {
+                super.updateItem(m, empty);
+                setText(empty || m == null ? null : m.getName() + " (M" + String.format("%03d", m.getId()) + ")");
+            }
+        });
+
+        bookCombo.setConverter(new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(Book b) {
+                return b == null ? "" : b.getTitle() + " — " + b.getAuthor();
+            }
+            @Override
+            public Book fromString(String s) {
+                return null;
+            }
+        });
+        bookCombo.setCellFactory(list -> new javafx.scene.control.ListCell<>() {
+            @Override
+            protected void updateItem(Book b, boolean empty) {
+                super.updateItem(b, empty);
+                setText(empty || b == null ? null : b.getTitle() + " — " + b.getAuthor());
+            }
+        });
 
         issueDatePicker.setValue(LocalDate.now());
+        issueDatePicker.setDisable(true); // always today's date
 
-        buildRecentlyIssued();
+        reload();
     }
 
-    private void buildRecentlyIssued() {
-        List<RecentIssue> recent = List.of(
-                new RecentIssue("Design Patterns", "Emily Chen", "Jul 1, 2026", "Jul 15, 2026"),
-                new RecentIssue("Clean Architecture", "James Wilson", "Jun 28, 2026", "Jul 12, 2026")
-        );
+    private void reload() {
+        try {
+            List<Member> members = memberService.getAllMembers();
+            memberCombo.setItems(FXCollections.observableArrayList(members));
+
+            List<Book> availableBooks = bookService.getAllBooks().stream()
+                    .filter(Book::isAvailable)
+                    .toList();
+            bookCombo.setItems(FXCollections.observableArrayList(availableBooks));
+
+            buildRecentlyIssued();
+        } catch (SQLException e) {
+            showError("Database Error", "Failed to load data: " + e.getMessage());
+        }
+    }
+
+    private void buildRecentlyIssued() throws SQLException {
+        List<Loan> loans = loanService.getAllLoans();
+        Map<Integer, Book> booksById = bookService.getAllBooks().stream()
+                .collect(Collectors.toMap(Book::getId, b -> b, (a, b) -> a));
+        Map<Integer, Member> membersById = memberService.getAllMembers().stream()
+                .collect(Collectors.toMap(Member::getId, m -> m, (a, b) -> a));
+
+        List<Loan> recent = loans.stream()
+                .filter(l -> !l.isReturned())
+                .sorted(Comparator.comparing(Loan::getLoanDate).reversed())
+                .limit(10)
+                .toList();
 
         recentlyIssuedBox.getChildren().clear();
-        for (RecentIssue issue : recent) {
-            Label title = new Label(issue.title());
+        if (recent.isEmpty()) {
+            Label empty = new Label("No active loans yet.");
+            empty.getStyleClass().add("recent-item-subtitle");
+            recentlyIssuedBox.getChildren().add(empty);
+            return;
+        }
+
+        for (Loan loan : recent) {
+            Book book = booksById.get(loan.getBookId());
+            Member member = membersById.get(loan.getMemberId());
+
+            Label title = new Label(book == null ? "Unknown book" : book.getTitle());
             title.getStyleClass().add("recent-item-title");
-            Label borrower = new Label(issue.borrower());
+            Label borrower = new Label(member == null ? "Unknown member" : member.getName());
             borrower.getStyleClass().add("recent-item-subtitle");
-            Label dates = new Label("\uD83D\uDCC5 " + issue.issueDate() + "   \u23F0 Due: " + issue.dueDate());
+            Label dates = new Label("\uD83D\uDCC5 " + fmt(loan.getLoanDate()) + "   \u23F0 Due: " + fmt(loan.getDueDate()));
             dates.getStyleClass().add("recent-item-date");
 
             VBox textBox = new VBox(2, title, borrower, dates);
 
-            Label activeBadge = new Label("Active");
-            activeBadge.getStyleClass().addAll("badge", "badge-green");
+            Label statusBadge = new Label(loan.isOverdue() ? "Overdue" : "Active");
+            statusBadge.getStyleClass().addAll("badge", loan.isOverdue() ? "badge-red" : "badge-green");
 
             Region spacer = new Region();
-            HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+            HBox.setHgrow(spacer, Priority.ALWAYS);
 
-            HBox row = new HBox(10, textBox, spacer, activeBadge);
-            row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            HBox row = new HBox(10, textBox, spacer, statusBadge);
+            row.setAlignment(Pos.CENTER_LEFT);
             recentlyIssuedBox.getChildren().add(row);
         }
     }
 
-    @SuppressWarnings("unused")
+    private String fmt(LocalDate date) {
+        return date == null ? "—" : date.format(DATE_FORMAT);
+    }
+
     @FXML
     private void onIssue() {
         if (memberCombo.getValue() == null || bookCombo.getValue() == null || dueDatePicker.getValue() == null) {
@@ -90,14 +176,26 @@ public class BorrowController {
             alert.showAndWait();
             return;
         }
-        String message = """
-                This will create a real BorrowTransaction once the Borrow Module is wired up.
+        if (!dueDatePicker.getValue().isAfter(LocalDate.now())) {
+            showError("Invalid Due Date", "The due date must be after today.");
+            return;
+        }
+        try {
+            loanService.issueBook(bookCombo.getValue().getId(), memberCombo.getValue().getId(), dueDatePicker.getValue());
+            bookCombo.setValue(null);
+            memberCombo.setValue(null);
+            dueDatePicker.setValue(null);
+            reload();
+        } catch (IllegalStateException e) {
+            showError("Could Not Issue Book", e.getMessage());
+        } catch (SQLException e) {
+            showError("Database Error", "Failed to issue book: " + e.getMessage());
+        }
+    }
 
-                Member: %s
-                Book: %s
-                Due: %s""".formatted(memberCombo.getValue(), bookCombo.getValue(), dueDatePicker.getValue());
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
-        alert.setHeaderText("Book would be issued");
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+        alert.setHeaderText(title);
         alert.showAndWait();
     }
 }

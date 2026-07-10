@@ -1,0 +1,92 @@
+.content-split-pane {
+    background-color: transparent;
+    -fx-background-color: transparent;
+    padding: 0;
+    -fx-padding: 0;
+}
+
+.content-split-pane > .split-pane-divider {
+    background-color: #e2e8f0;
+    -fx-background-color: #e2e8f0;
+    -fx-pref-width: 1px;
+}
+
+.results-list {
+    background-color: white;
+    -fx-background-color: white;
+    border-radius: 6px;
+    -fx-background-radius: 6px;
+    border-color: #e2e8f0;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    -fx-font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    -fx-font-size: 14px;
+}
+
+.results-list .list-cell {
+    padding: 10px;
+    -fx-padding: 10px;
+    border-color: transparent transparent #f1f5f9 transparent;
+    -fx-border-color: transparent transparent #f1f5f9 transparent;
+    border-width: 1px;
+    -fx-border-width: 1px;
+}
+
+.results-list .list-cell:empty {
+    border-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.results-list .list-cell:selected {
+    background-color: #f1f5f9;
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #1e293b;
+}
+
+.details-pane {
+    background-color: white;
+    -fx-background-color: white;
+    border-radius: 6px;
+    -fx-background-radius: 6px;
+    border-color: #e2e8f0;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 6px;
+}
+
+.detail-title {
+    font-family: 'Inter', sans-serif;
+    -fx-font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    -fx-font-size: 18px;
+    font-weight: bold;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+}
+
+.detail-author {
+    font-family: 'Inter', sans-serif;
+    -fx-font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #64748b;
+}
+
+.detail-year, .detail-source {
+    font-family: 'Inter', sans-serif;
+    -fx-font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #94a3b8;
+}
+
+.status-label {
+    font-family: 'Inter', sans-serif;
+    -fx-font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+    padding: 5px 0 0 0;
+    -fx-padding: 5 0 0 0;
+}

@@ -109,35 +109,7 @@ public class LoanRepository {
         return result.isEmpty() ? null : result.get(0);
     }
 
-    // ── aggregate counts for dashboard ───────────────────────────────────
 
-    public int countActive() throws SQLException {
-        return countWhere("WHERE returned = 0");
-    }
-
-    public int countOverdue() throws SQLException {
-        String today = LocalDate.now().toString();
-        String sql = "SELECT COUNT(*) FROM loans WHERE returned = 0 AND due_date IS NOT NULL AND due_date < ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, today);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() ? rs.getInt(1) : 0;
-            }
-        }
-    }
-
-    public int countReturnedToday() throws SQLException {
-        String today = LocalDate.now().toString();
-        String sql = "SELECT COUNT(*) FROM loans WHERE returned = 1 AND return_date = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, today);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() ? rs.getInt(1) : 0;
-            }
-        }
-    }
 
     // ── private helpers ───────────────────────────────────────────────────
 

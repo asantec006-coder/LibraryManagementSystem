@@ -13,12 +13,13 @@ public class SidebarController {
     @FXML private Button dashboardBtn;
     @FXML private Button booksBtn;
     @FXML private Button membersBtn;
+    @FXML private Button onlineLibraryBtn;
     @FXML private Button borrowBtn;
     @FXML private Button returnBtn;
     @FXML private Button reportsBtn;
     @FXML private Button settingsBtn;
 
-    public enum NavItem { DASHBOARD, BOOKS, MEMBERS, BORROW, RETURN, REPORTS, SETTINGS }
+    public enum NavItem { DASHBOARD, BOOKS, MEMBERS, ONLINE_LIBRARY, BORROW, RETURN, REPORTS, SETTINGS }
 
     /**
      * Highlights the nav item matching the currently displayed page.
@@ -31,6 +32,7 @@ public class SidebarController {
             case DASHBOARD -> dashboardBtn;
             case BOOKS -> booksBtn;
             case MEMBERS -> membersBtn;
+            case ONLINE_LIBRARY -> onlineLibraryBtn;
             case BORROW -> borrowBtn;
             case RETURN -> returnBtn;
             case REPORTS -> reportsBtn;
@@ -40,7 +42,7 @@ public class SidebarController {
     }
 
     private void clearActive() {
-        for (Button b : new Button[]{dashboardBtn, booksBtn, membersBtn, borrowBtn, returnBtn, reportsBtn, settingsBtn}) {
+        for (Button b : new Button[]{dashboardBtn, booksBtn, membersBtn, onlineLibraryBtn, borrowBtn, returnBtn, reportsBtn, settingsBtn}) {
             b.getStyleClass().remove("sidebar-item-active");
         }
     }
@@ -48,6 +50,7 @@ public class SidebarController {
     @FXML private void goToDashboard() { Navigator.goTo("/fxml/Dashboard.fxml"); }
     @FXML private void goToBooks()     { Navigator.goTo("/fxml/Books.fxml"); }
     @FXML private void goToMembers()   { Navigator.goTo("/fxml/Members.fxml"); }
+    @FXML private void goToOnlineLibrary() { Navigator.goTo("/fxml/OnlineLibrary.fxml"); }
     @FXML private void goToBorrow()    { Navigator.goTo("/fxml/Borrow.fxml"); }
     @FXML private void goToReturn()    { Navigator.goTo("/fxml/Return.fxml"); }
     @FXML private void goToReports()   { Navigator.goTo("/fxml/Reports.fxml"); }

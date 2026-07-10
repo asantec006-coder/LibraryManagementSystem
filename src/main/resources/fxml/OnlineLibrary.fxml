@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.library.controller.OnlineLibraryController"
+      styleClass="root-layout"
+      stylesheets="@../css/styles.css, @../css/online-library.css">
+
+    <!-- Sidebar Inclusion -->
+    <fx:include source="common/Sidebar.fxml" fx:id="sidebar"/>
+
+    <!-- Main Content Area -->
+    <BorderPane HBox.hgrow="ALWAYS" styleClass="main-content">
+        <padding>
+            <Insets top="30" right="40" bottom="30" left="40"/>
+        </padding>
+
+        <top>
+            <VBox spacing="20">
+                <!-- Header -->
+                <VBox spacing="5">
+                    <Label text="Online Library" styleClass="page-title"/>
+                    <Label text="Search and download books from Open Library and Project Gutenberg."
+                           styleClass="page-subtitle"/>
+                </VBox>
+
+                <!-- Toolbar -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                    <TextField fx:id="searchField" promptText="Search books by title, author..."
+                               styleClass="search-field" HBox.hgrow="ALWAYS"
+                               onAction="#handleSearch"/>
+                    <Button text="Search" onAction="#handleSearch" styleClass="primary-btn"/>
+                </HBox>
+                <BorderPane.margin>
+                    <Insets bottom="20"/>
+                </BorderPane.margin>
+            </VBox>
+        </top>
+
+        <center>
+            <SplitPane dividerPositions="0.4" styleClass="content-split-pane">
+                <!-- Left: Results List -->
+                <VBox spacing="10">
+                    <Label text="Search Results" styleClass="section-title"/>
+                    <ListView fx:id="resultsListView" VBox.vgrow="ALWAYS" styleClass="results-list"/>
+                    <Label fx:id="statusLabel" text="Ready" styleClass="status-label"/>
+                </VBox>
+
+                <!-- Right: Book Details -->
+                <VBox spacing="20" styleClass="details-pane" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    
+                    <ImageView fx:id="coverImageView" fitWidth="180" fitHeight="260" preserveRatio="true"/>
+                    
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label fx:id="titleLabel" styleClass="detail-title" wrapText="true" textAlignment="CENTER"/>
+                        <Label fx:id="authorLabel" styleClass="detail-author"/>
+                        <Label fx:id="yearLabel" styleClass="detail-year"/>
+                        <Label fx:id="sourceLabel" styleClass="detail-source"/>
+                    </VBox>
+
+                    <HBox spacing="15" alignment="CENTER">
+                        <Button fx:id="downloadBtn" text="Download" onAction="#handleDownload" styleClass="primary-btn"/>
+                        <Button fx:id="readOnlineBtn" text="Read Online" onAction="#handleReadOnline" styleClass="secondary-btn"/>
+                        <Button fx:id="openLocalBtn" text="Open Local File" onAction="#handleOpenLocal" styleClass="primary-btn" visible="false" managed="false"/>
+                    </HBox>
+
+                    <VBox fx:id="progressBox" spacing="5" visible="false" managed="false" alignment="CENTER">
+                        <Label fx:id="progressLabel" text="Downloading..."/>
+                        <ProgressBar fx:id="progressBar" prefWidth="250" progress="0.0"/>
+                    </VBox>
+                </VBox>
+            </SplitPane>
+        </center>
+    </BorderPane>
+</HBox>

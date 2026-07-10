@@ -42,6 +42,8 @@
                     styleClass="sidebar-item" maxWidth="Infinity"/>
             <Button fx:id="membersBtn" text="Members" onAction="#goToMembers"
                     styleClass="sidebar-item" maxWidth="Infinity"/>
+            <Button fx:id="onlineLibraryBtn" text="Online Library" onAction="#goToOnlineLibrary"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
 
             <Button fx:id="borrowBtn" onAction="#goToBorrow" styleClass="sidebar-item" maxWidth="Infinity">
                 <graphic>

@@ -33,7 +33,7 @@
                             <Region HBox.hgrow="ALWAYS"/>
                             <Label text="↗ +124 this month" styleClass="trend-up"/>
                         </HBox>
-                        <Label text="12,480" styleClass="stat-value"/>
+                        <Label fx:id="totalBooksLabel" text="0" styleClass="stat-value"/>
                         <Label text="Total Books" styleClass="stat-label"/>
                     </VBox>
 
@@ -43,7 +43,7 @@
                             <Region HBox.hgrow="ALWAYS"/>
                             <Label text="↗ +48 this month" styleClass="trend-up"/>
                         </HBox>
-                        <Label text="3,241" styleClass="stat-value"/>
+                        <Label fx:id="activeMembersLabel" text="0" styleClass="stat-value"/>
                         <Label text="Active Members" styleClass="stat-label"/>
                     </VBox>
 
@@ -53,7 +53,7 @@
                             <Region HBox.hgrow="ALWAYS"/>
                             <Label text="↗ +62 this month" styleClass="trend-up"/>
                         </HBox>
-                        <Label text="847" styleClass="stat-value"/>
+                        <Label fx:id="borrowedBooksLabel" text="0" styleClass="stat-value"/>
                         <Label text="Books Borrowed" styleClass="stat-label"/>
                     </VBox>
 
@@ -63,7 +63,7 @@
                             <Region HBox.hgrow="ALWAYS"/>
                             <Label text="↘ -5 this month" styleClass="trend-down"/>
                         </HBox>
-                        <Label text="23" styleClass="stat-value"/>
+                        <Label fx:id="overdueBooksLabel" text="0" styleClass="stat-value"/>
                         <Label text="Overdue Books" styleClass="stat-label"/>
                     </VBox>
                 </HBox>

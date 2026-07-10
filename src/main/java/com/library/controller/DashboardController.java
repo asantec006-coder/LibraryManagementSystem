@@ -2,18 +2,26 @@ package com.library.controller;
 
 import com.library.controller.common.SidebarController;
 import com.library.controller.common.TopBarController;
+import com.library.model.AdminUser;
+import com.library.util.Session;
 import javafx.fxml.FXML;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
-import java.util.LinkedHashMap;
+import com.library.service.AnalyticsService;
+import com.library.model.dto.DashboardMetrics;
+
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -30,40 +38,73 @@ public class DashboardController {
     @FXML private CategoryAxis trendXAxis;
     @FXML private NumberAxis trendYAxis;
     @FXML private VBox categoryBarsBox;
+    
+    @FXML private Label totalBooksLabel;
+    @FXML private Label activeMembersLabel;
+    @FXML private Label borrowedBooksLabel;
+    @FXML private Label overdueBooksLabel;
+    
+    private AnalyticsService analyticsService;
 
     @FXML
     public void initialize() {
         sidebarController.setActive(SidebarController.NavItem.DASHBOARD);
-        topBarController.setTitle("Dashboard", "Welcome back, Admin Librarian!");
-
-        buildTrendChart();
-        buildCategoryBars();
+        
+        AdminUser user = Session.getCurrentUser();
+        String name = (user == null || user.getFullName() == null || user.getFullName().isBlank())
+                ? "Librarian" : user.getFullName();
+        topBarController.setTitle("Dashboard", "Welcome back, " + name + "!");
+        
+        analyticsService = new AnalyticsService();
+        loadDashboardData();
+    }
+    
+    private void loadDashboardData() {
+        try {
+            DashboardMetrics metrics = analyticsService.getDashboardMetrics();
+            Map<String, Integer> trend = analyticsService.getLoanTrend(6);
+            Map<String, Integer> popularCategories = analyticsService.getPopularCategories(5);
+            
+            Platform.runLater(() -> {
+                updateStats(metrics);
+                buildTrendChart(trend);
+                buildCategoryBars(popularCategories);
+            });
+        } catch (SQLException e) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load dashboard data: " + e.getMessage(), ButtonType.OK);
+                alert.showAndWait();
+            });
+            e.printStackTrace();
+        }
+    }
+    
+    private void updateStats(DashboardMetrics metrics) {
+        totalBooksLabel.setText(String.format("%,d", metrics.totalBooks()));
+        activeMembersLabel.setText(String.format("%,d", metrics.activeMembers()));
+        borrowedBooksLabel.setText(String.format("%,d", metrics.activeLoans()));
+        overdueBooksLabel.setText(String.format("%,d", metrics.overdueLoans()));
     }
 
-    private void buildTrendChart() {
-        Map<String, Integer> monthly = new LinkedHashMap<>();
-        monthly.put("Jan", 560);
-        monthly.put("Feb", 640);
-        monthly.put("Mar", 720);
-        monthly.put("Apr", 610);
-        monthly.put("May", 780);
-        monthly.put("Jun", 900);
-        monthly.put("Jul", 860);
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        monthly.forEach((month, value) -> series.getData().add(new XYChart.Data<>(month, value)));
+    private void buildTrendChart(Map<String, Integer> trend) {
+        trendChart.getData().clear();
+        
+        javafx.scene.chart.XYChart.Series<String, Number> series = new javafx.scene.chart.XYChart.Series<>();
+        if (trend.isEmpty()) {
+            series.getData().add(new javafx.scene.chart.XYChart.Data<>("No Data", 0));
+        } else {
+            trend.forEach((month, value) -> series.getData().add(new javafx.scene.chart.XYChart.Data<>(month, value)));
+        }
+        
         trendChart.getData().add(series);
     }
 
-    private void buildCategoryBars() {
-        Map<String, Integer> categories = new LinkedHashMap<>();
-        categories.put("Fiction", 600);
-        categories.put("Science", 480);
-        categories.put("History", 420);
-        categories.put("Tech", 340);
-        categories.put("Arts", 220);
-
-        int max = categories.values().stream().max(Integer::compareTo).orElse(1);
+    private void buildCategoryBars(Map<String, Integer> categories) {
+        if (categories.isEmpty()) {
+            categories.put("No data", 0);
+        }
+        
+        final int finalMax = Math.max(categories.values().stream().max(Integer::compareTo).orElse(1), 1);
 
         categoryBarsBox.getChildren().clear();
         categories.forEach((name, value) -> {
@@ -77,7 +118,7 @@ public class DashboardController {
 
             Region fill = new Region();
             fill.getStyleClass().add("category-bar-fill");
-            fill.setPrefWidth(200 * value / (double) max);
+            fill.setPrefWidth(200 * value / (double) finalMax);
 
             javafx.scene.layout.StackPane barStack = new javafx.scene.layout.StackPane();
             barStack.setAlignment(javafx.geometry.Pos.CENTER_LEFT);

@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public final class DatabaseConnection {
 
-    private static final String DB_URL = "jdbc:sqlite:library.db";
+    private static final String DB_URL = "jdbc:sqlite:library_prod.db";
     private static Connection connection;
 
     private DatabaseConnection() {
