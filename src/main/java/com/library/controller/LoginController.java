@@ -47,6 +47,11 @@ public class LoginController {
         }
     }
 
+    @FXML
+    private void onForgotPassword() {
+        Navigator.goTo("/fxml/ForgotPassword.fxml");
+    }
+
     private void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);

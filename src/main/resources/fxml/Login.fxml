@@ -72,7 +72,7 @@
 
         <HBox alignment="CENTER_LEFT">
             <Label text="Password" styleClass="login-field-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-            <Hyperlink text="Forgot password?" styleClass="login-forgot-link"/>
+            <Hyperlink text="Forgot password?" styleClass="login-forgot-link" onAction="#onForgotPassword"/>
         </HBox>
         <PasswordField fx:id="passwordField" text="password" styleClass="login-input"/>
 
