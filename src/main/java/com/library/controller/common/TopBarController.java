@@ -51,6 +51,13 @@ public class TopBarController {
 
     @FXML
     private void goToNotifications() {
+        com.library.controller.SettingsController.initialTab = "Notifications";
+        Navigator.goTo("/fxml/Settings.fxml");
+    }
+
+    @FXML
+    private void goToSecuritySettings() {
+        com.library.controller.SettingsController.initialTab = "Security";
         Navigator.goTo("/fxml/Settings.fxml");
     }
 

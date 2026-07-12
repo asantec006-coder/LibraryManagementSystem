@@ -33,6 +33,8 @@ import java.util.Map;
  */
 public class SettingsController {
 
+    public static String initialTab = "General";
+
     /* ── Shared sub-controllers ────────────────────────────── */
     @FXML private SidebarController sidebarController;
     @FXML private TopBarController topBarController;
@@ -93,6 +95,17 @@ public class SettingsController {
         loadNotificationPreferences();
         loadSecurityInfo();
         loadBackupInfo();
+
+        if ("Notifications".equals(initialTab)) {
+            showNotifications();
+        } else if ("Security".equals(initialTab)) {
+            showSecurity();
+        } else if ("Backup".equals(initialTab)) {
+            showBackup();
+        } else {
+            showGeneral();
+        }
+        initialTab = "General"; // reset after use
 
         // Live password-strength feedback
         newPasswordField.textProperty().addListener((obs, oldVal, newVal) -> updatePasswordStrength(newVal));
