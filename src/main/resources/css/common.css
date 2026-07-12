@@ -9,350 +9,475 @@
 /* ===================== Layout & page basics ===================== */
 .app-root {
     -fx-background-color: #f4f6fb;
+    background-color: #f4f6fb;
     -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 .page-content {
     -fx-background-color: #f4f6fb;
+    background-color: #f4f6fb;
 }
 
 .page-header-title {
     -fx-font-size: 26px;
+    font-size: 26px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-text-fill: #101828;
 }
 
 .page-header-subtitle {
     -fx-font-size: 13px;
+    font-size: 13px;
     -fx-text-fill: #667085;
 }
 
 /* ===================== Sidebar ===================== */
 .sidebar {
     -fx-background-color: #0b132b;
+    background-color: #0b132b;
     -fx-min-width: 250px;
+    min-width: 250px;
     -fx-pref-width: 250px;
     -fx-max-width: 250px;
+    max-width: 250px;
 }
 
 .sidebar-brand-box {
     -fx-background-color: linear-gradient(to bottom right, #3b5bfd, #1e3a8a);
+    background-color: linear-gradient(to bottom right, #3b5bfd, #1e3a8a);
     -fx-background-radius: 10px;
     -fx-min-width: 40px;
+    min-width: 40px;
     -fx-min-height: 40px;
+    min-height: 40px;
     -fx-max-width: 40px;
+    max-width: 40px;
     -fx-max-height: 40px;
+    max-height: 40px;
     -fx-alignment: center;
 }
 
 .sidebar-brand-name {
     -fx-text-fill: white;
     -fx-font-size: 16px;
+    font-size: 16px;
     -fx-font-weight: bold;
+    font-weight: bold;
 }
 
 .sidebar-brand-subtitle {
     -fx-text-fill: #7d8bb3;
     -fx-font-size: 11px;
+    font-size: 11px;
 }
 
 .sidebar-section-label {
     -fx-text-fill: #5b6a94;
     -fx-font-size: 10px;
+    font-size: 10px;
     -fx-font-weight: bold;
+    font-weight: bold;
 }
 
 .sidebar-item {
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-text-fill: #b6c0dd;
     -fx-font-size: 13px;
+    font-size: 13px;
     -fx-alignment: center-left;
     -fx-padding: 10 14 10 14;
+    padding: 10 14 10 14;
     -fx-background-radius: 8px;
     -fx-cursor: hand;
+    cursor: hand;
     -fx-graphic-text-gap: 10;
 }
 
 .sidebar-item:hover {
     -fx-background-color: #16224a;
+    background-color: #16224a;
 }
 
 .sidebar-item-active {
     -fx-background-color: linear-gradient(to right, #3b5bfd, #2544c7);
+    background-color: linear-gradient(to right, #3b5bfd, #2544c7);
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    font-weight: bold;
 }
 
 .sidebar-item-active:hover {
     -fx-background-color: linear-gradient(to right, #3b5bfd, #2544c7);
+    background-color: linear-gradient(to right, #3b5bfd, #2544c7);
 }
 
 .sidebar-badge {
     -fx-background-color: #3b5bfd;
+    background-color: #3b5bfd;
     -fx-text-fill: white;
     -fx-font-size: 10px;
+    font-size: 10px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-background-radius: 10px;
     -fx-padding: 1 7 1 7;
+    padding: 1 7 1 7;
 }
 
 .sidebar-divider {
     -fx-background-color: #182450;
+    background-color: #182450;
 }
 
 .sidebar-footer {
     -fx-background-color: #0f1a3d;
+    background-color: #0f1a3d;
     -fx-background-radius: 10px;
     -fx-padding: 14;
+    padding: 14;
 }
 
 .sidebar-avatar {
     -fx-background-color: linear-gradient(to bottom right, #3b5bfd, #1e3a8a);
+    background-color: linear-gradient(to bottom right, #3b5bfd, #1e3a8a);
     -fx-background-radius: 50%;
     -fx-min-width: 36px;
+    min-width: 36px;
     -fx-min-height: 36px;
+    min-height: 36px;
     -fx-max-width: 36px;
+    max-width: 36px;
     -fx-max-height: 36px;
+    max-height: 36px;
     -fx-alignment: center;
 }
 
 .sidebar-avatar-text {
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-font-size: 12px;
+    font-size: 12px;
 }
 
 .sidebar-user-name {
     -fx-text-fill: white;
     -fx-font-size: 12px;
+    font-size: 12px;
     -fx-font-weight: bold;
+    font-weight: bold;
 }
 
 .sidebar-user-email {
     -fx-text-fill: #7d8bb3;
     -fx-font-size: 10px;
+    font-size: 10px;
 }
 
 /* ===================== Top bar ===================== */
 .topbar {
     -fx-background-color: white;
+    background-color: white;
     -fx-border-color: transparent transparent #e9ecf5 transparent;
+    border-color: transparent transparent #e9ecf5 transparent;
     -fx-border-width: 0 0 1 0;
+    border-width: 0 0 1 0;
 }
 
 .topbar-search {
     -fx-pref-height: 38px;
     -fx-pref-width: 320px;
     -fx-background-color: #f4f6fb;
+    background-color: #f4f6fb;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
+    border-radius: 10px;
     -fx-border-color: #e9ecf5;
+    border-color: #e9ecf5;
     -fx-padding: 0 10 0 10;
+    padding: 0 10 0 10;
 }
 
 .topbar-icon-btn {
     -fx-background-color: #f4f6fb;
+    background-color: #f4f6fb;
     -fx-background-radius: 50%;
     -fx-min-width: 36px;
+    min-width: 36px;
     -fx-min-height: 36px;
+    min-height: 36px;
     -fx-max-width: 36px;
+    max-width: 36px;
     -fx-max-height: 36px;
+    max-height: 36px;
     -fx-cursor: hand;
+    cursor: hand;
 }
 
 .topbar-icon-btn:hover {
     -fx-background-color: #e9ecf5;
+    background-color: #e9ecf5;
 }
 
 .topbar-badge {
     -fx-background-color: #dc2626;
+    background-color: #dc2626;
     -fx-text-fill: white;
     -fx-font-size: 9px;
+    font-size: 9px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-background-radius: 50%;
     -fx-min-width: 16px;
+    min-width: 16px;
     -fx-min-height: 16px;
+    min-height: 16px;
     -fx-alignment: center;
 }
 
 .topbar-avatar {
     -fx-background-color: linear-gradient(to bottom right, #3b5bfd, #1e3a8a);
+    background-color: linear-gradient(to bottom right, #3b5bfd, #1e3a8a);
     -fx-background-radius: 50%;
     -fx-min-width: 32px;
+    min-width: 32px;
     -fx-min-height: 32px;
+    min-height: 32px;
     -fx-max-width: 32px;
+    max-width: 32px;
     -fx-max-height: 32px;
+    max-height: 32px;
     -fx-alignment: center;
 }
 
 .topbar-avatar-text {
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-font-size: 11px;
+    font-size: 11px;
 }
 
 .topbar-username {
     -fx-text-fill: #101828;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-font-size: 13px;
+    font-size: 13px;
 }
 
 /* ===================== Stat cards ===================== */
 .stat-card {
     -fx-background-color: white;
+    background-color: white;
     -fx-background-radius: 14px;
     -fx-border-radius: 14px;
+    border-radius: 14px;
     -fx-border-color: #eef0f7;
+    border-color: #eef0f7;
     -fx-border-width: 1px;
+    border-width: 1px;
     -fx-padding: 18;
+    padding: 18;
     -fx-effect: dropshadow(gaussian, rgba(16,24,64,0.05), 12, 0, 0, 3);
 }
 
 .stat-icon-box {
     -fx-background-radius: 10px;
     -fx-min-width: 42px;
+    min-width: 42px;
     -fx-min-height: 42px;
+    min-height: 42px;
     -fx-max-width: 42px;
+    max-width: 42px;
     -fx-max-height: 42px;
+    max-height: 42px;
     -fx-alignment: center;
 }
 
-.stat-icon-blue    { -fx-background-color: #dbe4ff; }
-.stat-icon-green   { -fx-background-color: #dcfce7; }
-.stat-icon-purple  { -fx-background-color: #e6e0ff; }
-.stat-icon-red     { -fx-background-color: #fee2e2; }
-.stat-icon-amber   { -fx-background-color: #fef3c7; }
+.stat-icon-blue    { -fx-background-color: #dbe4ff; background-color: #dbe4ff; }
+.stat-icon-green   { -fx-background-color: #dcfce7; background-color: #dcfce7; }
+.stat-icon-purple  { -fx-background-color: #e6e0ff; background-color: #e6e0ff; }
+.stat-icon-red     { -fx-background-color: #fee2e2; background-color: #fee2e2; }
+.stat-icon-amber   { -fx-background-color: #fef3c7; background-color: #fef3c7; }
 
 .stat-value {
     -fx-font-size: 28px;
+    font-size: 28px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-text-fill: #101828;
 }
 
 .stat-label {
     -fx-font-size: 13px;
+    font-size: 13px;
     -fx-text-fill: #667085;
 }
 
 .stat-sublabel {
     -fx-font-size: 11px;
+    font-size: 11px;
     -fx-text-fill: #98a2b3;
 }
 
 .trend-up {
     -fx-background-color: #dcfce7;
+    background-color: #dcfce7;
     -fx-text-fill: #16a34a;
     -fx-font-size: 11px;
+    font-size: 11px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-background-radius: 20px;
     -fx-padding: 3 10 3 10;
+    padding: 3 10 3 10;
 }
 
 .trend-down {
     -fx-background-color: #fee2e2;
+    background-color: #fee2e2;
     -fx-text-fill: #dc2626;
     -fx-font-size: 11px;
+    font-size: 11px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-background-radius: 20px;
     -fx-padding: 3 10 3 10;
+    padding: 3 10 3 10;
 }
 
 /* Dark highlighted panel, e.g. the Dashboard's "Outstanding Fines" card */
 .highlight-card {
     -fx-background-color: linear-gradient(to bottom right, #16224a, #0b1226);
+    background-color: linear-gradient(to bottom right, #16224a, #0b1226);
     -fx-background-radius: 14px;
     -fx-padding: 20;
+    padding: 20;
 }
 
 .highlight-card-label {
     -fx-text-fill: #93a2d6;
     -fx-font-size: 11px;
+    font-size: 11px;
     -fx-font-weight: bold;
+    font-weight: bold;
 }
 
 .highlight-card-value {
     -fx-text-fill: white;
     -fx-font-size: 30px;
+    font-size: 30px;
     -fx-font-weight: bold;
+    font-weight: bold;
 }
 
 .highlight-card-note {
     -fx-text-fill: #93a2d6;
     -fx-font-size: 11px;
+    font-size: 11px;
 }
 
 /* ===================== Generic content cards ===================== */
 .content-card {
     -fx-background-color: white;
+    background-color: white;
     -fx-background-radius: 14px;
     -fx-border-radius: 14px;
+    border-radius: 14px;
     -fx-border-color: #eef0f7;
+    border-color: #eef0f7;
     -fx-border-width: 1px;
+    border-width: 1px;
     -fx-padding: 20;
+    padding: 20;
     -fx-effect: dropshadow(gaussian, rgba(16,24,64,0.05), 12, 0, 0, 3);
 }
 
 .section-title {
     -fx-font-size: 16px;
+    font-size: 16px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-text-fill: #101828;
 }
 
 .section-subtitle {
     -fx-font-size: 12px;
+    font-size: 12px;
     -fx-text-fill: #98a2b3;
 }
 
 /* ===================== Badges ===================== */
 .badge {
     -fx-font-size: 11px;
+    font-size: 11px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-background-radius: 20px;
     -fx-padding: 3 12 3 12;
+    padding: 3 12 3 12;
 }
 
-.badge-green  { -fx-background-color: #dcfce7; -fx-text-fill: #16a34a; }
-.badge-red    { -fx-background-color: #fee2e2; -fx-text-fill: #dc2626; }
-.badge-blue   { -fx-background-color: #dbe4ff; -fx-text-fill: #3b5bfd; }
-.badge-amber  { -fx-background-color: #fef3c7; -fx-text-fill: #b45309; }
-.badge-gray   { -fx-background-color: #f3f4f6; -fx-text-fill: #4b5563; }
+.badge-green  { -fx-background-color: #dcfce7; background-color: #dcfce7; -fx-text-fill: #16a34a; }
+.badge-red    { -fx-background-color: #fee2e2; background-color: #fee2e2; -fx-text-fill: #dc2626; }
+.badge-blue   { -fx-background-color: #dbe4ff; background-color: #dbe4ff; -fx-text-fill: #3b5bfd; }
+.badge-amber  { -fx-background-color: #fef3c7; background-color: #fef3c7; -fx-text-fill: #b45309; }
+.badge-gray   { -fx-background-color: #f3f4f6; background-color: #f3f4f6; -fx-text-fill: #4b5563; }
 
 /* ===================== Buttons ===================== */
 .btn-primary {
     -fx-background-color: linear-gradient(to right, #3b5bfd, #2544c7);
+    background-color: linear-gradient(to right, #3b5bfd, #2544c7);
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-background-radius: 9px;
     -fx-padding: 9 18 9 18;
+    padding: 9 18 9 18;
     -fx-cursor: hand;
+    cursor: hand;
 }
-.btn-primary:hover { -fx-background-color: linear-gradient(to right, #2f4de0, #1e3aae); }
+.btn-primary:hover { -fx-background-color: linear-gradient(to right, #2f4de0, #1e3aae); background-color: linear-gradient(to right, #2f4de0, #1e3aae); }
 
 .btn-secondary {
     -fx-background-color: #eef1f8;
+    background-color: #eef1f8;
     -fx-text-fill: #1f2937;
     -fx-background-radius: 9px;
     -fx-padding: 9 18 9 18;
+    padding: 9 18 9 18;
     -fx-cursor: hand;
+    cursor: hand;
 }
-.btn-secondary:hover { -fx-background-color: #dfe4f3; }
+.btn-secondary:hover { -fx-background-color: #dfe4f3; background-color: #dfe4f3; }
 
 .btn-danger {
     -fx-background-color: #fee2e2;
+    background-color: #fee2e2;
     -fx-text-fill: #dc2626;
     -fx-background-radius: 9px;
     -fx-padding: 9 18 9 18;
+    padding: 9 18 9 18;
     -fx-cursor: hand;
+    cursor: hand;
 }
-.btn-danger:hover { -fx-background-color: #fecaca; }
+.btn-danger:hover { -fx-background-color: #fecaca; background-color: #fecaca; }
 
 .icon-btn {
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-cursor: hand;
+    cursor: hand;
     -fx-padding: 4;
+    padding: 4;
 }
 .icon-btn:hover {
     -fx-background-color: #eef1f8;
+    background-color: #eef1f8;
     -fx-background-radius: 6px;
 }
 
@@ -360,52 +485,67 @@
 .text-field, .combo-box, .date-picker {
     -fx-pref-height: 38px;
     -fx-background-color: white;
+    background-color: white;
     -fx-background-radius: 9px;
     -fx-border-radius: 9px;
+    border-radius: 9px;
     -fx-border-color: #d9deec;
+    border-color: #d9deec;
 }
 
 .text-field:focused, .combo-box:focused, .date-picker:focused {
     -fx-border-color: #3b5bfd;
+    border-color: #3b5bfd;
 }
 
 /* ===================== Tables ===================== */
 .data-table {
     -fx-background-color: white;
+    background-color: white;
     -fx-background-radius: 8px;
 }
 
 .data-table .column-header-background {
     -fx-background-color: #f8f9fc;
+    background-color: #f8f9fc;
 }
 
 .data-table .column-header .label {
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-font-size: 11px;
+    font-size: 11px;
     -fx-text-fill: #667085;
 }
 
 .data-table .table-row-cell {
     -fx-border-color: transparent transparent #f1f2f8 transparent;
+    border-color: transparent transparent #f1f2f8 transparent;
 }
 
 .data-table .table-row-cell:selected {
     -fx-background-color: #eef1ff;
+    background-color: #eef1ff;
 }
 
 /* ===================== Charts (line/pie) ===================== */
 .chart-plot-background {
     -fx-background-color: transparent;
+    background-color: transparent;
 }
 .chart-vertical-grid-lines, .chart-horizontal-grid-lines {
     -fx-stroke: #f1f2f8;
+    stroke: #f1f2f8;
 }
 .default-color0.chart-series-line {
     -fx-stroke: #3b5bfd;
+    stroke: #3b5bfd;
     -fx-stroke-width: 2.5px;
+    stroke-width: 2.5px;
 }
 .default-color0.chart-line-symbol {
     -fx-background-color: #3b5bfd, white;
+    background-color: #3b5bfd, white;
 }
 .default-color0.chart-pie {
     -fx-pie-color: #3b5bfd;
@@ -422,3 +562,4 @@
 .default-color4.chart-pie {
     -fx-pie-color: #f59e0b;
 }
+
