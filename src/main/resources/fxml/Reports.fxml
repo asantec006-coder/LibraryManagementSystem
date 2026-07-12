@@ -37,27 +37,27 @@
                 <HBox spacing="20">
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                         <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128218;"/></StackPane>
-                        <Label text="734" styleClass="stat-value"/>
+                        <Label fx:id="avgBooksPerMonthLabel" text="0" styleClass="stat-value"/>
                         <Label text="Avg Books/Month" styleClass="stat-label"/>
-                        <Label text="+8.2% vs last year" styleClass="stat-sublabel"/>
+                        <Label text="Averaged over the last 12 months" styleClass="stat-sublabel"/>
                     </VBox>
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                         <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#128101;"/></StackPane>
-                        <Label text="+141" styleClass="stat-value"/>
+                        <Label fx:id="memberGrowthLabel" text="0" styleClass="stat-value"/>
                         <Label text="Member Growth" styleClass="stat-label"/>
-                        <Label text="New members in 2026" styleClass="stat-sublabel"/>
+                        <Label fx:id="memberGrowthSublabel" text="New members this year" styleClass="stat-sublabel"/>
                     </VBox>
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                         <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128200;"/></StackPane>
-                        <Label text="96.4%" styleClass="stat-value"/>
+                        <Label fx:id="returnRateLabel" text="&#8212;" styleClass="stat-value"/>
                         <Label text="Return Rate" styleClass="stat-label"/>
                         <Label text="Books returned on time" styleClass="stat-sublabel"/>
                     </VBox>
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                         <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#9888;"/></StackPane>
-                        <Label text="$270" styleClass="stat-value"/>
-                        <Label text="Total Fines" styleClass="stat-label"/>
-                        <Label text="Collected this year" styleClass="stat-sublabel"/>
+                        <Label fx:id="outstandingFinesLabel" text="$0.00" styleClass="stat-value"/>
+                        <Label text="Estimated Fines Due" styleClass="stat-label"/>
+                        <Label text="Based on current overdue loans" styleClass="stat-sublabel"/>
                     </VBox>
                 </HBox>
 

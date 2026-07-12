@@ -12,6 +12,7 @@ public class MemberDialogController {
     @FXML private TextField nameField;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
+    @FXML private TextField studentIdField;
     @FXML private ComboBox<String> typeComboBox;
     @FXML private ComboBox<String> statusComboBox;
     @FXML private Label errorLabel;
@@ -31,6 +32,7 @@ public class MemberDialogController {
         nameField.setText(member.getName());
         emailField.setText(member.getEmail());
         phoneField.setText(member.getPhone());
+        studentIdField.setText(member.getStudentId());
         typeComboBox.getSelectionModel().select(member.getMembershipType());
         statusComboBox.getSelectionModel().select(member.getStatus());
     }
@@ -39,6 +41,7 @@ public class MemberDialogController {
         String name = nameField.getText().trim();
         String email = emailField.getText().trim();
         String phone = phoneField.getText().trim();
+        String studentId = studentIdField.getText() == null ? "" : studentIdField.getText().trim();
         String type = typeComboBox.getValue();
         String status = statusComboBox.getValue();
         
@@ -50,7 +53,8 @@ public class MemberDialogController {
         LocalDate joinDate = existingMember != null ? existingMember.getJoinDate() : LocalDate.now();
         int borrowed = existingMember != null ? existingMember.getBooksBorrowed() : 0;
 
-        return new Member(id, name, email, phone, joinDate, borrowed, type, status);
+        return new Member(id, name, email, phone, studentId.isEmpty() ? null : studentId,
+                joinDate, borrowed, type, status);
     }
     
     public void showError(String message) {

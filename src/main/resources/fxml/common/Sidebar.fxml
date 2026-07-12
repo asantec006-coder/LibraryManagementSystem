@@ -45,18 +45,18 @@
             <Button fx:id="onlineLibraryBtn" text="Online Library" onAction="#goToOnlineLibrary"
                     styleClass="sidebar-item" maxWidth="Infinity"/>
 
-            <Button fx:id="borrowBtn" onAction="#goToBorrow" styleClass="sidebar-item" maxWidth="Infinity">
+            <Button fx:id="borrowBtn" text="Borrow Book" onAction="#goToBorrow"
+                    styleClass="sidebar-item" maxWidth="Infinity"/>
+
+            <Button fx:id="returnBtn" onAction="#goToReturn" styleClass="sidebar-item" maxWidth="Infinity">
                 <graphic>
                     <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Label text="Borrow Book"/>
+                        <Label text="Return Book"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Label text="3" styleClass="sidebar-badge"/>
+                        <Label fx:id="returnBadge" text="0" styleClass="sidebar-badge" visible="false" managed="false"/>
                     </HBox>
                 </graphic>
             </Button>
-
-            <Button fx:id="returnBtn" text="Return Book" onAction="#goToReturn"
-                    styleClass="sidebar-item" maxWidth="Infinity"/>
 
             <Separator styleClass="sidebar-divider">
                 <VBox.margin><Insets top="10" bottom="6"/></VBox.margin>
@@ -77,11 +77,11 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sidebar-footer">
         <StackPane styleClass="sidebar-avatar">
-            <Label text="AL" styleClass="sidebar-avatar-text"/>
+            <Label fx:id="sidebarUserInitials" text="AL" styleClass="sidebar-avatar-text"/>
         </StackPane>
         <VBox HBox.hgrow="ALWAYS">
-            <Label text="Admin Librarian" styleClass="sidebar-user-name"/>
-            <Label text="admin@library.com" styleClass="sidebar-user-email"/>
+            <Label fx:id="sidebarUserName" text="Admin Librarian" styleClass="sidebar-user-name"/>
+            <Label fx:id="sidebarUserEmail" text="admin@library.com" styleClass="sidebar-user-email"/>
         </VBox>
         <Button text="&#8674;" styleClass="icon-btn" onAction="#logout"
                 style="-fx-text-fill: #94a3b8; -fx-font-size: 14px;"/>

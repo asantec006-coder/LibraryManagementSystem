@@ -28,22 +28,22 @@
             <HBox spacing="20">
                 <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                     <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128101;"/></StackPane>
-                    <Label text="8" styleClass="stat-value"/>
+                    <Label fx:id="totalMembersLabel" text="0" styleClass="stat-value"/>
                     <Label text="Total Members" styleClass="stat-label"/>
                 </VBox>
                 <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                     <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#10003;"/></StackPane>
-                    <Label text="6" styleClass="stat-value"/>
+                    <Label fx:id="activeMembersLabel" text="0" styleClass="stat-value"/>
                     <Label text="Active Members" styleClass="stat-label"/>
                 </VBox>
                 <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                     <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128218;"/></StackPane>
-                    <Label text="17" styleClass="stat-value"/>
+                    <Label fx:id="booksOutLabel" text="0" styleClass="stat-value"/>
                     <Label text="Books Currently Out" styleClass="stat-label"/>
                 </VBox>
                 <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                     <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#10024;"/></StackPane>
-                    <Label text="3" styleClass="stat-value"/>
+                    <Label fx:id="newThisMonthLabel" text="0" styleClass="stat-value"/>
                     <Label text="New This Month" styleClass="stat-label"/>
                 </VBox>
             </HBox>

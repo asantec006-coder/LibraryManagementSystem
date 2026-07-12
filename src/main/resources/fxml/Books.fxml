@@ -29,10 +29,11 @@
                                styleClass="books-search-field" HBox.hgrow="ALWAYS"/>
                     <ComboBox fx:id="filterCombo" promptText="All"/>
                     <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Fetch Missing Covers" onAction="#onFetchMissingCovers" styleClass="btn-secondary"/>
                     <Button text="+ Add New Book" onAction="#onAdd" styleClass="btn-primary"/>
                 </HBox>
 
-                <Label fx:id="summaryLabel" text="8 books found · 28 copies available" styleClass="books-summary"/>
+                <Label fx:id="summaryLabel" text="Loading books..." styleClass="books-summary"/>
 
                 <FlowPane fx:id="bookCardsPane" hgap="20" vgap="20"/>
             </VBox>

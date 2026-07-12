@@ -4,7 +4,6 @@ import com.library.db.DatabaseConnection;
 import com.library.model.Member;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +29,7 @@ public class MemberRepository {
                 "name TEXT NOT NULL, " +
                 "email TEXT NOT NULL UNIQUE, " +
                 "phone TEXT, " +
+                "student_id TEXT, " +
                 "join_date TEXT NOT NULL, " +
                 "books_borrowed INTEGER NOT NULL DEFAULT 0, " +
                 "membership_type TEXT NOT NULL CHECK(membership_type IN ('Standard','Premium')), " +
@@ -38,22 +38,26 @@ public class MemberRepository {
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
+            // Add student_id to existing tables that pre-date this column.
+            try { stmt.execute("ALTER TABLE members ADD COLUMN student_id TEXT"); }
+            catch (SQLException ignored) { /* column already exists */ }
         }
     }
 
     public Member save(Member member) throws SQLException {
-        String sql = "INSERT INTO members (name, email, phone, join_date, books_borrowed, membership_type, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO members (name, email, phone, student_id, join_date, books_borrowed, membership_type, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, member.getName());
             ps.setString(2, member.getEmail());
             ps.setString(3, member.getPhone());
-            ps.setDate(4, Date.valueOf(member.getJoinDate()));
-            ps.setInt(5, member.getBooksBorrowed());
-            ps.setString(6, member.getMembershipType());
-            ps.setString(7, member.getStatus());
+            ps.setString(4, member.getStudentId());
+            ps.setString(5, member.getJoinDate() == null ? null : member.getJoinDate().toString());
+            ps.setInt(6, member.getBooksBorrowed());
+            ps.setString(7, member.getMembershipType());
+            ps.setString(8, member.getStatus());
 
             ps.executeUpdate();
 
@@ -67,7 +71,7 @@ public class MemberRepository {
     }
 
     public boolean update(Member member) throws SQLException {
-        String sql = "UPDATE members SET name = ?, email = ?, phone = ?, join_date = ?, " +
+        String sql = "UPDATE members SET name = ?, email = ?, phone = ?, student_id = ?, join_date = ?, " +
                 "books_borrowed = ?, membership_type = ?, status = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -75,11 +79,12 @@ public class MemberRepository {
             ps.setString(1, member.getName());
             ps.setString(2, member.getEmail());
             ps.setString(3, member.getPhone());
-            ps.setDate(4, Date.valueOf(member.getJoinDate()));
-            ps.setInt(5, member.getBooksBorrowed());
-            ps.setString(6, member.getMembershipType());
-            ps.setString(7, member.getStatus());
-            ps.setInt(8, member.getId());
+            ps.setString(4, member.getStudentId());
+            ps.setString(5, member.getJoinDate() == null ? null : member.getJoinDate().toString());
+            ps.setInt(6, member.getBooksBorrowed());
+            ps.setString(7, member.getMembershipType());
+            ps.setString(8, member.getStatus());
+            ps.setInt(9, member.getId());
 
             return ps.executeUpdate() > 0;
         }
@@ -137,13 +142,14 @@ public class MemberRepository {
 
     public List<Member> search(String keyword) throws SQLException {
         List<Member> members = new ArrayList<>();
-        String sql = "SELECT * FROM members WHERE name LIKE ? OR email LIKE ? OR phone LIKE ? ORDER BY name";
+        String sql = "SELECT * FROM members WHERE name LIKE ? OR email LIKE ? OR phone LIKE ? OR student_id LIKE ? ORDER BY name";
         String like = "%" + keyword + "%";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, like);
             ps.setString(2, like);
             ps.setString(3, like);
+            ps.setString(4, like);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     members.add(mapRow(rs));
@@ -158,10 +164,29 @@ public class MemberRepository {
         String name = rs.getString("name");
         String email = rs.getString("email");
         String phone = rs.getString("phone");
-        LocalDate joinDate = rs.getDate("join_date").toLocalDate();
+        String studentId = rs.getString("student_id");
+        LocalDate joinDate = parseJoinDate(rs.getString("join_date"));
         int booksBorrowed = rs.getInt("books_borrowed");
         String membershipType = rs.getString("membership_type");
         String status = rs.getString("status");
-        return new Member(id, name, email, phone, joinDate, booksBorrowed, membershipType, status);
+        return new Member(id, name, email, phone, studentId, joinDate, booksBorrowed, membershipType, status);
+    }
+
+    /**
+     * Parses join_date, which is stored as ISO text ("2026-07-10") going
+     * forward. Rows written by an earlier version of this repository (which
+     * used JDBC's setDate/getDate) may still hold a raw epoch-millis number
+     * as text — this falls back to parsing that so old rows keep working.
+     */
+    private LocalDate parseJoinDate(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        if (value.chars().allMatch(Character::isDigit)) {
+            return java.time.Instant.ofEpochMilli(Long.parseLong(value))
+                    .atZone(java.time.ZoneId.systemDefault())
+                    .toLocalDate();
+        }
+        return LocalDate.parse(value);
     }
 }

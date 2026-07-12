@@ -76,6 +76,15 @@ public class BookService {
                 .orElse(false);
     }
 
+    /**
+     * Attaches a cover image path to a book without re-running full book
+     * validation. Used by CoverImageService after a search/download/upload
+     * completes, and by the "Fetch Missing Covers" batch job.
+     */
+    public void updateCoverImage(int bookId, String coverImagePath) throws SQLException {
+        bookRepository.updateCoverImage(bookId, coverImagePath);
+    }
+
     private void validateBook(Book book) {
         if (book.getTitle() == null || book.getTitle().isBlank()) {
             throw new IllegalArgumentException("Title is required.");

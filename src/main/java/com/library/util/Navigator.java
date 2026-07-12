@@ -5,8 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 /**
  * Very small navigation helper for the visual prototype stage of the UI.
  * Each screen is still its own top-level FXML (with its own <fx:include>
@@ -48,8 +46,17 @@ public final class Navigator {
             if (wasMaximized) {
                 primaryStage.setMaximized(true);
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Could not load screen: " + fxmlPath, e);
+        } catch (Exception e) {
+            // A screen that fails to load (bad fx:id wiring, a bug in its
+            // initialize(), a database hiccup, etc.) must not fail silently —
+            // that just looks like the button did nothing. Show what broke.
+            e.printStackTrace();
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Could not open this screen (" + fxmlPath + "):\n" + e.getMessage(),
+                    javafx.scene.control.ButtonType.OK);
+            alert.setHeaderText("Something went wrong");
+            alert.showAndWait();
         }
     }
 }

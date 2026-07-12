@@ -2,26 +2,37 @@ package com.library.controller;
 
 import com.library.controller.common.SidebarController;
 import com.library.controller.common.TopBarController;
+import com.library.model.Loan;
+import com.library.model.Member;
+import com.library.repository.BookRepository;
+import com.library.repository.LoanRepository;
+import com.library.repository.MemberRepository;
+import com.library.service.AnalyticsService;
+import com.library.service.BookService;
+import com.library.service.LoanService;
+import com.library.service.MemberService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.application.Platform;
-
-import com.library.service.AnalyticsService;
+import javafx.scene.control.Label;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Controller for Reports.fxml. Visual/static prototype with mock chart
- * data. When the Reports Module exists, replace both mock maps with
- * aggregate queries (e.g. BorrowService.getMonthlyActivity(),
- * BookService.getCategoryDistribution()).
+ * Controller for Reports.fxml. Every number here is computed from the
+ * real books/members/loans tables — no mock/sample data.
  */
 public class ReportsController {
+
+    private static final double FINE_PER_DAY_OVERDUE = 0.50;
 
     @FXML
     private SidebarController sidebarController;
@@ -33,7 +44,15 @@ public class ReportsController {
     @FXML
     private PieChart categoryPieChart;
 
+    @FXML private Label avgBooksPerMonthLabel;
+    @FXML private Label memberGrowthLabel;
+    @FXML private Label memberGrowthSublabel;
+    @FXML private Label returnRateLabel;
+    @FXML private Label outstandingFinesLabel;
+
     private AnalyticsService analyticsService;
+    private MemberService memberService;
+    private LoanService loanService;
 
     @FXML
     public void initialize() {
@@ -41,6 +60,9 @@ public class ReportsController {
         topBarController.setTitle("Reports", "Analytics & insights");
 
         analyticsService = new AnalyticsService();
+        memberService = new MemberService(new MemberRepository());
+        loanService = new LoanService(new LoanRepository(), new BookService(new BookRepository()), memberService);
+
         loadReportData();
     }
 
@@ -48,10 +70,13 @@ public class ReportsController {
         try {
             Map<String, Integer> trend = analyticsService.getLoanTrend(12);
             Map<String, Integer> categories = analyticsService.getPopularCategories(10);
+            List<Member> members = memberService.getAllMembers();
+            List<Loan> loans = loanService.getAllLoans();
 
             Platform.runLater(() -> {
                 buildActivityChart(trend);
                 buildCategoryPieChart(categories);
+                buildStatCards(trend, members, loans);
             });
         } catch (SQLException e) {
             Platform.runLater(() -> {
@@ -61,6 +86,42 @@ public class ReportsController {
             });
             e.printStackTrace();
         }
+    }
+
+    private void buildStatCards(Map<String, Integer> trend, List<Member> members, List<Loan> loans) {
+        // Avg Books/Month: mean of the same 12-month trend shown in the chart above.
+        double avgPerMonth = trend.isEmpty() ? 0 : trend.values().stream().mapToInt(Integer::intValue).average().orElse(0);
+        avgBooksPerMonthLabel.setText(String.valueOf(Math.round(avgPerMonth)));
+
+        // Member Growth: members who joined this calendar year.
+        int currentYear = LocalDate.now().getYear();
+        long newMembersThisYear = members.stream()
+                .filter(m -> m.getJoinDate() != null && m.getJoinDate().getYear() == currentYear)
+                .count();
+        memberGrowthLabel.setText("+" + newMembersThisYear);
+        memberGrowthSublabel.setText("New members in " + currentYear);
+
+        // Return Rate: of loans that have been returned, what fraction came back on or before the due date.
+        List<Loan> returnedLoans = loans.stream().filter(Loan::isReturned).toList();
+        if (returnedLoans.isEmpty()) {
+            returnRateLabel.setText("—");
+        } else {
+            long onTime = returnedLoans.stream()
+                    .filter(l -> l.getReturnDate() != null && l.getDueDate() != null
+                            && !l.getReturnDate().isAfter(l.getDueDate()))
+                    .count();
+            double rate = 100.0 * onTime / returnedLoans.size();
+            returnRateLabel.setText(String.format("%.1f%%", rate));
+        }
+
+        // Estimated Fines Due: policy-based estimate ($0.50/day) applied to loans that are
+        // currently overdue and not yet returned. There's no fine-payment ledger in this
+        // app, so this is explicitly an estimate of what's currently owed, not a "collected" total.
+        double outstandingFines = loans.stream()
+                .filter(l -> !l.isReturned() && l.isOverdue())
+                .mapToDouble(l -> ChronoUnit.DAYS.between(l.getDueDate(), LocalDate.now()) * FINE_PER_DAY_OVERDUE)
+                .sum();
+        outstandingFinesLabel.setText(String.format("$%.2f", outstandingFines));
     }
 
     private void buildActivityChart(Map<String, Integer> trend) {

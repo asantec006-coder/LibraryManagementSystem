@@ -24,26 +24,26 @@
                 <VBox styleClass="content-card" spacing="14" HBox.hgrow="ALWAYS" minWidth="380">
                     <Label text="Find Borrowing Record" styleClass="section-title"/>
                     <TextField fx:id="searchField" promptText="Search by record ID, member name, or book title..."/>
-                    <Label fx:id="activeCountLabel" text="6 active borrowings" styleClass="section-subtitle"/>
+                    <Label fx:id="activeCountLabel" text="Loading..." styleClass="section-subtitle"/>
                     <VBox fx:id="activeBorrowingsBox" spacing="14"/>
                 </VBox>
 
                 <VBox spacing="20" prefWidth="340" minWidth="260" HBox.hgrow="SOMETIMES">
                     <GridPane hgap="16" vgap="16">
                         <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="0" GridPane.columnIndex="0">
-                            <Label fx:id="activeBorrowsLabel" text="6" styleClass="stat-value" style="-fx-text-fill: #2563eb;"/>
+                            <Label fx:id="activeBorrowsLabel" text="0" styleClass="stat-value" style="-fx-text-fill: #2563eb;"/>
                             <Label text="Active Borrows" styleClass="stat-label"/>
                         </VBox>
                         <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="0" GridPane.columnIndex="1">
-                            <Label fx:id="overdueLabel" text="1" styleClass="stat-value" style="-fx-text-fill: #dc2626;"/>
+                            <Label fx:id="overdueLabel" text="0" styleClass="stat-value" style="-fx-text-fill: #dc2626;"/>
                             <Label text="Overdue" styleClass="stat-label"/>
                         </VBox>
                         <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                            <Label fx:id="returnedTodayLabel" text="3" styleClass="stat-value" style="-fx-text-fill: #16a34a;"/>
+                            <Label fx:id="returnedTodayLabel" text="0" styleClass="stat-value" style="-fx-text-fill: #16a34a;"/>
                             <Label text="Returned Today" styleClass="stat-label"/>
                         </VBox>
                         <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="1" GridPane.columnIndex="1">
-                            <Label fx:id="finesLabel" text="$12.50" styleClass="stat-value" style="-fx-text-fill: #d97706;"/>
+                            <Label fx:id="finesLabel" text="$0.00" styleClass="stat-value" style="-fx-text-fill: #d97706;"/>
                             <Label text="Fines Collected" styleClass="stat-label"/>
                         </VBox>
                     </GridPane>

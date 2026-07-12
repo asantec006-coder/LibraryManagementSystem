@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+
+<HBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.library.controller.BookDialogController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Left: cover preview and cover management -->
+    <VBox spacing="10" alignment="TOP_CENTER" prefWidth="170">
+        <StackPane>
+            <ImageView fx:id="coverImageView" fitWidth="150" fitHeight="220" preserveRatio="false"
+                       style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);"/>
+            <ProgressIndicator fx:id="coverSpinner" visible="false" managed="false" maxWidth="40" maxHeight="40"/>
+        </StackPane>
+
+        <Label fx:id="coverStatusLabel" text="" wrapText="true" textAlignment="CENTER"
+               style="-fx-font-size: 11px; -fx-text-fill: #6b7280;" maxWidth="160"/>
+
+        <Button fx:id="searchCoverBtn" text="Search Cover" onAction="#onSearchCover" maxWidth="Infinity" styleClass="btn-secondary"/>
+        <Button fx:id="uploadCoverBtn" text="Upload Cover" onAction="#onUploadCover" maxWidth="Infinity" styleClass="btn-secondary"/>
+        <Button fx:id="removeCoverBtn" text="Remove Cover" onAction="#onRemoveCover" maxWidth="Infinity" styleClass="btn-secondary"/>
+    </VBox>
+
+    <!-- Right: book details form -->
+    <VBox spacing="15" HBox.hgrow="ALWAYS">
+        <Label text="Book Details" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+
+        <GridPane hgap="10" vgap="12">
+            <columnConstraints>
+                <ColumnConstraints minWidth="100"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Type:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="typeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity">
+                <items>
+                    <javafx.collections.FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Physical"/>
+                        <String fx:value="EBook"/>
+                    </javafx.collections.FXCollections>
+                </items>
+            </ComboBox>
+
+            <Label text="Title:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="titleField" promptText="Enter book title" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Author:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="authorField" promptText="Enter author name" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="ISBN:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="isbnField" promptText="e.g. 9780134685991 (optional)" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Category:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="genreField" promptText="Enter category / genre" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <VBox fx:id="physicalGroup" spacing="8">
+            <Label text="Total Copies" styleClass="form-label"/>
+            <TextField fx:id="totalCopiesField" text="1"/>
+            <Label text="Available Copies" styleClass="form-label"/>
+            <TextField fx:id="availableCopiesField" text="1"/>
+        </VBox>
+
+        <VBox fx:id="ebookGroup" spacing="8" visible="false" managed="false">
+            <Label text="Download URL" styleClass="form-label"/>
+            <TextField fx:id="downloadUrlField"/>
+            <Label text="Max Concurrent Licenses" styleClass="form-label"/>
+            <TextField fx:id="maxLicensesField" text="1"/>
+            <Label text="Active Loans" styleClass="form-label"/>
+            <TextField fx:id="activeLoansField" text="0"/>
+        </VBox>
+
+        <Label fx:id="errorLabel" textFill="RED" visible="false" managed="false" wrapText="true"/>
+    </VBox>
+</HBox>

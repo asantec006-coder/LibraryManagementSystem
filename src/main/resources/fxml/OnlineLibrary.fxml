@@ -15,8 +15,8 @@
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.library.controller.OnlineLibraryController"
-      styleClass="root-layout"
-      stylesheets="@../css/styles.css, @../css/online-library.css">
+      styleClass="app-root"
+      stylesheets="@../css/common.css, @../css/online-library.css">
 
     <!-- Sidebar Inclusion -->
     <fx:include source="common/Sidebar.fxml" fx:id="sidebar"/>
@@ -31,9 +31,9 @@
             <VBox spacing="20">
                 <!-- Header -->
                 <VBox spacing="5">
-                    <Label text="Online Library" styleClass="page-title"/>
+                    <Label text="Online Library" styleClass="page-header-title"/>
                     <Label text="Search and download books from Open Library and Project Gutenberg."
-                           styleClass="page-subtitle"/>
+                           styleClass="page-header-subtitle"/>
                 </VBox>
 
                 <!-- Toolbar -->
@@ -41,7 +41,7 @@
                     <TextField fx:id="searchField" promptText="Search books by title, author..."
                                styleClass="search-field" HBox.hgrow="ALWAYS"
                                onAction="#handleSearch"/>
-                    <Button text="Search" onAction="#handleSearch" styleClass="primary-btn"/>
+                    <Button text="Search" onAction="#handleSearch" styleClass="btn-primary"/>
                 </HBox>
                 <BorderPane.margin>
                     <Insets bottom="20"/>
@@ -74,9 +74,9 @@
                     </VBox>
 
                     <HBox spacing="15" alignment="CENTER">
-                        <Button fx:id="downloadBtn" text="Download" onAction="#handleDownload" styleClass="primary-btn"/>
-                        <Button fx:id="readOnlineBtn" text="Read Online" onAction="#handleReadOnline" styleClass="secondary-btn"/>
-                        <Button fx:id="openLocalBtn" text="Open Local File" onAction="#handleOpenLocal" styleClass="primary-btn" visible="false" managed="false"/>
+                        <Button fx:id="downloadBtn" text="Download" onAction="#handleDownload" styleClass="btn-primary"/>
+                        <Button fx:id="readOnlineBtn" text="Read Online" onAction="#handleReadOnline" styleClass="btn-secondary"/>
+                        <Button fx:id="openLocalBtn" text="Open Local File" onAction="#handleOpenLocal" styleClass="btn-primary" visible="false" managed="false"/>
                     </HBox>
 
                     <VBox fx:id="progressBox" spacing="5" visible="false" managed="false" alignment="CENTER">

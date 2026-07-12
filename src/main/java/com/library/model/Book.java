@@ -12,6 +12,8 @@ public abstract class Book {
     private String author;
     private String isbn;
     private String genre;
+    /** Relative path to the cached cover image, e.g. "covers/9780439554930.jpg". Null/blank means no cover yet. */
+    private String coverImage;
 
     public Book() {
     }
@@ -62,6 +64,14 @@ public abstract class Book {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
     }
 
     /**

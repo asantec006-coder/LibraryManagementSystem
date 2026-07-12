@@ -27,8 +27,11 @@
         <Label text="Phone:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <TextField fx:id="phoneField" promptText="Enter phone number" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-        <Label text="Type:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="typeComboBox" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity">
+        <Label text="Student ID:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="studentIdField" promptText="e.g. STU-2026-0042 (optional)" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Type:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="typeComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity">
             <items>
                 <javafx.collections.FXCollections fx:factory="observableArrayList">
                     <String fx:value="Standard"/>
@@ -37,8 +40,8 @@
             </items>
         </ComboBox>
         
-        <Label text="Status:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="statusComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity">
+        <Label text="Status:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="statusComboBox" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity">
             <items>
                 <javafx.collections.FXCollections fx:factory="observableArrayList">
                     <String fx:value="Active"/>

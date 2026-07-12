@@ -110,13 +110,14 @@ public class OnlineLibraryController {
         yearLabel.setText(book.getPublicationYear() != null ? "Published: " + book.getPublicationYear() : "");
         sourceLabel.setText("Source: " + book.getSource());
 
-        // Load cover image
-        if (book.getCoverUrl() != null && !book.getCoverUrl().isEmpty()) {
-            Image image = new Image(book.getCoverUrl(), true); // true = load in background
-            coverImageView.setImage(image);
-        } else {
-            coverImageView.setImage(null);
-        }
+        // Load cover image (default.png if there's no cover URL or it fails to load — this must never crash)
+        Image image = com.library.util.CoverImageLoader.loadFromUrl(book.getCoverUrl());
+        coverImageView.setImage(image);
+        image.errorProperty().addListener((obs, wasError, isError) -> {
+            if (isError) {
+                Platform.runLater(() -> coverImageView.setImage(com.library.util.CoverImageLoader.load((String) null)));
+            }
+        });
 
         // Configure buttons
         readOnlineBtn.setDisable(book.getReadOnlineUrl() == null);
@@ -150,7 +151,7 @@ public class OnlineLibraryController {
         authorLabel.setText("");
         yearLabel.setText("");
         sourceLabel.setText("");
-        coverImageView.setImage(null);
+        coverImageView.setImage(com.library.util.CoverImageLoader.load((String) null));
         downloadBtn.setDisable(true);
         readOnlineBtn.setDisable(true);
         openLocalBtn.setVisible(false);

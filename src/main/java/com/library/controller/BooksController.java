@@ -7,8 +7,11 @@ import com.library.model.EBook;
 import com.library.model.PhysicalBook;
 import com.library.repository.BookRepository;
 import com.library.service.BookService;
-import javafx.collections.FXCollections;
+import com.library.service.cover.CoverImageService;
+import com.library.util.CoverImageLoader;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -17,26 +20,31 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * Controller for Books.fxml. Backed by real data via BookService —
- * no mock/sample data. Add/Edit uses an in-code dialog (kept simple:
- * no separate FXML) that adapts its fields to Physical vs EBook.
+ * Controller for Books.fxml. Backed by real data via BookService — no
+ * mock/sample data. Add/Edit opens BookDialog.fxml, which also owns cover
+ * search/upload/remove. Cards show the book's actual cached cover (falling
+ * back to the shared default placeholder) via CoverImageLoader.
  */
 public class BooksController {
 
     private final BookService bookService = new BookService(new BookRepository());
+    private final CoverImageService coverImageService = new CoverImageService(bookService);
 
     @FXML private SidebarController sidebarController;
     @FXML private TopBarController topBarController;
@@ -53,12 +61,17 @@ public class BooksController {
         sidebarController.setActive(SidebarController.NavItem.BOOKS);
         topBarController.setTitle("Books", "Manage your library collection");
 
-        filterCombo.setItems(FXCollections.observableArrayList("All", "Physical", "EBook"));
+        filterCombo.setItems(javafx.collections.FXCollections.observableArrayList("All", "Physical", "EBook"));
         filterCombo.setValue("All");
         filterCombo.valueProperty().addListener((obs, oldVal, newVal) -> applyFilter());
         searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilter());
 
         reload();
+
+        String pendingQuery = com.library.util.PendingSearch.consumeIfFor(com.library.util.PendingSearch.Target.BOOKS);
+        if (pendingQuery != null) {
+            searchField.setText(pendingQuery);
+        }
     }
 
     private void reload() {
@@ -108,15 +121,20 @@ public class BooksController {
         Label typeBadge = new Label(isPhysical ? "Physical" : "EBook");
         typeBadge.getStyleClass().add("book-card-rating-badge");
 
-        Label coverIcon = new Label("\uD83D\uDCD6");
-        coverIcon.getStyleClass().add("book-card-cover-icon");
+        ImageView coverView = new ImageView(CoverImageLoader.load(book));
+        coverView.setFitWidth(220);
+        coverView.setFitHeight(140);
+        coverView.setPreserveRatio(false);
 
-        StackPane cover = new StackPane(coverIcon);
-        cover.getStyleClass().addAll("book-card-cover", isPhysical ? "cover-blue" : "cover-purple");
+        StackPane cover = new StackPane(coverView);
+        cover.getStyleClass().add("book-card-cover");
+        cover.setMinHeight(140);
+        cover.setMaxHeight(140);
         StackPane.setAlignment(typeBadge, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(genreBadge, Pos.TOP_RIGHT);
         cover.getChildren().addAll(genreBadge, typeBadge);
         cover.setPadding(new Insets(10));
+        cover.setClip(new javafx.scene.shape.Rectangle(220, 140));
 
         Label title = new Label(book.getTitle());
         title.getStyleClass().add("book-card-title");
@@ -171,6 +189,58 @@ public class BooksController {
         openBookDialog(null);
     }
 
+    /**
+     * Scans the catalog for books missing a cover and tries to fetch one for
+     * each from Open Library / Google Books, in the background, showing
+     * progress without freezing the UI. This is this app's nav-bar
+     * equivalent of a "Fetch Missing Covers" menu item (the app doesn't
+     * have a traditional menu bar — it's a sidebar-driven layout — so this
+     * lives as a toolbar button on the Books page instead).
+     */
+    @FXML
+    private void onFetchMissingCovers() {
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.setPrefWidth(300);
+        Label progressLabel = new Label("Scanning catalog...");
+        VBox content = new VBox(10, progressLabel, progressBar);
+        content.setPadding(new Insets(16));
+
+        Dialog<Void> progressDialog = new Dialog<>();
+        progressDialog.setTitle("Fetch Missing Covers");
+        progressDialog.getDialogPane().setContent(content);
+        progressDialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        progressDialog.show();
+
+        CompletableFuture
+                .supplyAsync(() -> {
+                    try {
+                        return coverImageService.fetchMissingCovers((processed, total) -> Platform.runLater(() -> {
+                            if (total > 0) {
+                                progressBar.setProgress((double) processed / total);
+                                progressLabel.setText("Fetching covers... (" + processed + "/" + total + ")");
+                            }
+                        }));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .thenAccept(updatedCount -> Platform.runLater(() -> {
+                    progressDialog.close();
+                    reload();
+                    Alert done = new Alert(Alert.AlertType.INFORMATION,
+                            updatedCount + " cover(s) were found and downloaded.", ButtonType.OK);
+                    done.setHeaderText("Fetch Missing Covers Complete");
+                    done.showAndWait();
+                }))
+                .exceptionally(ex -> {
+                    Platform.runLater(() -> {
+                        progressDialog.close();
+                        showError("Fetch Missing Covers Failed", ex.getMessage());
+                    });
+                    return null;
+                });
+    }
+
     private void deleteBook(Book book) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 "Delete \"" + book.getTitle() + "\"? This cannot be undone.", ButtonType.YES, ButtonType.CANCEL);
@@ -185,107 +255,44 @@ public class BooksController {
         }
     }
 
-    /** Add/Edit dialog. Pass null for "existing" to add a new book. */
+    /** Add/Edit dialog (BookDialog.fxml). Pass null for "existing" to add a new book. */
     private void openBookDialog(Book existing) {
         boolean isEdit = existing != null;
-
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle(isEdit ? "Edit Book" : "Add New Book");
-
-        ComboBox<String> typeCombo = new ComboBox<>(FXCollections.observableArrayList("Physical", "EBook"));
-        typeCombo.setValue(isEdit ? (existing instanceof PhysicalBook ? "Physical" : "EBook") : "Physical");
-        typeCombo.setDisable(isEdit); // changing type of an existing book is not supported
-
-        TextField titleField = new TextField(isEdit ? existing.getTitle() : "");
-        TextField authorField = new TextField(isEdit ? existing.getAuthor() : "");
-        TextField isbnField = new TextField(isEdit ? existing.getIsbn() : "");
-        TextField genreField = new TextField(isEdit ? existing.getGenre() : "");
-
-        TextField totalCopiesField = new TextField(isEdit && existing instanceof PhysicalBook pb ? String.valueOf(pb.getTotalCopies()) : "1");
-        TextField availableCopiesField = new TextField(isEdit && existing instanceof PhysicalBook pb ? String.valueOf(pb.getAvailableCopies()) : "1");
-
-        TextField downloadUrlField = new TextField(isEdit && existing instanceof EBook eb ? eb.getDownloadUrl() : "");
-        TextField maxLicensesField = new TextField(isEdit && existing instanceof EBook eb ? String.valueOf(eb.getMaxConcurrentLicenses()) : "1");
-        TextField activeLoansField = new TextField(isEdit && existing instanceof EBook eb ? String.valueOf(eb.getActiveLoans()) : "0");
-
-        VBox physicalGroup = new VBox(6, new Label("Total Copies"), totalCopiesField, new Label("Available Copies"), availableCopiesField);
-        VBox ebookGroup = new VBox(6, new Label("Download URL"), downloadUrlField, new Label("Max Concurrent Licenses"), maxLicensesField, new Label("Active Loans"), activeLoansField);
-        ebookGroup.setManaged(false);
-        ebookGroup.setVisible(false);
-
-        typeCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
-            boolean physical = "Physical".equals(newVal);
-            physicalGroup.setVisible(physical);
-            physicalGroup.setManaged(physical);
-            ebookGroup.setVisible(!physical);
-            ebookGroup.setManaged(!physical);
-        });
-        if ("EBook".equals(typeCombo.getValue())) {
-            physicalGroup.setVisible(false);
-            physicalGroup.setManaged(false);
-            ebookGroup.setVisible(true);
-            ebookGroup.setManaged(true);
-        }
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(8);
-        grid.setPadding(new Insets(16));
-        int row = 0;
-        grid.addRow(row++, new Label("Type"), typeCombo);
-        grid.addRow(row++, new Label("Title"), titleField);
-        grid.addRow(row++, new Label("Author"), authorField);
-        grid.addRow(row++, new Label("ISBN"), isbnField);
-        grid.addRow(row++, new Label("Genre"), genreField);
-        grid.add(physicalGroup, 0, row, 2, 1);
-        grid.add(ebookGroup, 0, row, 2, 1);
-
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        dialog.showAndWait().ifPresent(result -> {
-            if (result != ButtonType.OK) {
-                return;
-            }
-            try {
-                Book book;
-                if ("Physical".equals(typeCombo.getValue())) {
-                    int totalCopies = parseIntOrThrow(totalCopiesField.getText(), "Total copies");
-                    int availableCopies = parseIntOrThrow(availableCopiesField.getText(), "Available copies");
-                    PhysicalBook pb = new PhysicalBook(isEdit ? existing.getId() : 0,
-                            titleField.getText().trim(), authorField.getText().trim(),
-                            isbnField.getText().trim(), genreField.getText().trim(),
-                            totalCopies, availableCopies);
-                    book = pb;
-                } else {
-                    int maxLicenses = parseIntOrThrow(maxLicensesField.getText(), "Max concurrent licenses");
-                    int activeLoans = parseIntOrThrow(activeLoansField.getText(), "Active loans");
-                    EBook eb = new EBook(isEdit ? existing.getId() : 0,
-                            titleField.getText().trim(), authorField.getText().trim(),
-                            isbnField.getText().trim(), genreField.getText().trim(),
-                            downloadUrlField.getText().trim(), maxLicenses, activeLoans);
-                    book = eb;
-                }
-
-                if (isEdit) {
-                    bookService.updateBook(book);
-                } else {
-                    bookService.addBook(book);
-                }
-                reload();
-            } catch (IllegalArgumentException e) {
-                showError("Validation Error", e.getMessage());
-            } catch (SQLException e) {
-                showError("Database Error", "Failed to save book: " + e.getMessage());
-            }
-        });
-    }
-
-    private int parseIntOrThrow(String text, String fieldName) {
         try {
-            return Integer.parseInt(text.trim());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(fieldName + " must be a whole number.");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/BookDialog.fxml"));
+            javafx.scene.Parent dialogContent = loader.load();
+            BookDialogController controller = loader.getController();
+            controller.setBook(existing);
+
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle(isEdit ? "Edit Book" : "Add New Book");
+            dialog.getDialogPane().setContent(dialogContent);
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+            Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                try {
+                    Book book = controller.getBook();
+                    if (isEdit) {
+                        bookService.updateBook(book);
+                    } else {
+                        bookService.addBook(book);
+                    }
+                } catch (IllegalArgumentException | SQLException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+                    alert.setHeaderText(e instanceof SQLException ? "Database Error" : "Validation Error");
+                    alert.showAndWait();
+                    event.consume();
+                }
+            });
+
+            dialog.showAndWait().ifPresent(result -> {
+                if (result == ButtonType.OK) {
+                    reload();
+                }
+            });
+        } catch (IOException e) {
+            showError("Could Not Open Dialog", e.getMessage());
         }
     }
 

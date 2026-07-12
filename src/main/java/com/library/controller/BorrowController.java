@@ -88,10 +88,23 @@ public class BorrowController {
             }
         });
         bookCombo.setCellFactory(list -> new javafx.scene.control.ListCell<>() {
+            private final javafx.scene.image.ImageView thumb = new javafx.scene.image.ImageView();
+            {
+                thumb.setFitWidth(24);
+                thumb.setFitHeight(32);
+                thumb.setPreserveRatio(false);
+            }
             @Override
             protected void updateItem(Book b, boolean empty) {
                 super.updateItem(b, empty);
-                setText(empty || b == null ? null : b.getTitle() + " — " + b.getAuthor());
+                if (empty || b == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(b.getTitle() + " — " + b.getAuthor());
+                    thumb.setImage(com.library.util.CoverImageLoader.load(b));
+                    setGraphic(thumb);
+                }
             }
         });
 
@@ -142,6 +155,12 @@ public class BorrowController {
             Book book = booksById.get(loan.getBookId());
             Member member = membersById.get(loan.getMemberId());
 
+            javafx.scene.image.ImageView coverView = new javafx.scene.image.ImageView(
+                    com.library.util.CoverImageLoader.load(book));
+            coverView.setFitWidth(32);
+            coverView.setFitHeight(44);
+            coverView.setPreserveRatio(false);
+
             Label title = new Label(book == null ? "Unknown book" : book.getTitle());
             title.getStyleClass().add("recent-item-title");
             Label borrower = new Label(member == null ? "Unknown member" : member.getName());
@@ -157,7 +176,7 @@ public class BorrowController {
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
-            HBox row = new HBox(10, textBox, spacer, statusBadge);
+            HBox row = new HBox(10, coverView, textBox, spacer, statusBadge);
             row.setAlignment(Pos.CENTER_LEFT);
             recentlyIssuedBox.getChildren().add(row);
         }

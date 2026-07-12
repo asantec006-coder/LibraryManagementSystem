@@ -8,112 +8,93 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.library.controller.LoginController"
-      stylesheets="@../css/common.css,@../css/login.css">
+<!--
+    Login screen: the GCTU library photo fills the whole window as the
+    background (via CSS background-size:cover on .login-bg-photo, so it
+    scales/crops responsively with no Java-side image code needed), with a
+    dark scrim for contrast and a centered login card on top. The card's
+    fields/actions follow a standard "LibraByte-style" login form: brand
+    row, heading, email + password fields, Forgot password link, Remember
+    me, primary Log In button, and the (real) demo-credentials box.
 
-    <!-- Left branding panel -->
-    <VBox styleClass="login-left-panel" prefWidth="480" HBox.hgrow="NEVER">
-        <padding><Insets top="40" right="40" bottom="30" left="40"/></padding>
+    Deliberately NOT included: third-party "Log in with Google/Facebook/
+    Instagram/LinkedIn" buttons some reference login designs show. This
+    app has no OAuth integration behind any of those, so adding the icons
+    would just be more fake, non-functional UI — exactly what we've been
+    removing elsewhere. Real SSO can be added later if it's ever needed.
+-->
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.library.controller.LoginController"
+           stylesheets="@../css/common.css,@../css/login.css">
 
+    <!-- Background photo -->
+    <Region styleClass="login-bg-photo"/>
+    <!-- Dark scrim for text/card contrast -->
+    <Region styleClass="login-bg-scrim"/>
+
+    <!-- Library name/attribution, bottom-left -->
+    <VBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
+        <padding><Insets left="30" bottom="20"/></padding>
+        <Label text="GCTU Library" styleClass="login-footer-text" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+        <Label text="Ghana Communication Technology University" styleClass="login-footer-text"/>
+    </VBox>
+
+    <!-- Centered login card -->
+    <VBox styleClass="login-card" maxWidth="440" maxHeight="-Infinity" spacing="6" alignment="CENTER">
         <HBox spacing="12" alignment="CENTER_LEFT">
-            <StackPane styleClass="sidebar-brand-box">
-                <Text text="&#128218;" style="-fx-font-size: 16px;"/>
+            <StackPane styleClass="login-brand-box">
+                <Text text="&#128218;" style="-fx-font-size: 16px; -fx-fill: white;"/>
             </StackPane>
             <VBox>
                 <Label text="LibraryMS" styleClass="login-brand-name"/>
-                <Label text="Management System" styleClass="login-brand-subtitle"/>
+                <Label text="GCTU Library Management System" styleClass="login-brand-subtitle"/>
             </VBox>
         </HBox>
 
-        <Region prefHeight="60"/>
+        <Region prefHeight="20"/>
 
-        <Label text="Manage Your Library" wrapText="true" styleClass="login-headline"/>
-        <Label text="With Ease" wrapText="true" styleClass="login-headline-accent"/>
+        <Label text="Log in" styleClass="login-form-title"/>
+        <Label text="Sign in to your library dashboard" styleClass="login-form-subtitle"/>
+
+        <Region prefHeight="24"/>
+
+        <Label text="Email Address" styleClass="login-field-label"/>
+        <TextField fx:id="emailField" text="admin@library.com" styleClass="login-input"/>
+
+        <Region prefHeight="16"/>
+
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Password" styleClass="login-field-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Hyperlink text="Forgot password?" styleClass="login-forgot-link"/>
+        </HBox>
+        <PasswordField fx:id="passwordField" text="password" styleClass="login-input"/>
+
+        <Region prefHeight="12"/>
+
+        <CheckBox fx:id="rememberMeCheck" text="Remember me for 30 days" selected="true" styleClass="login-checkbox"/>
 
         <Region prefHeight="20"/>
 
-        <Label wrapText="true" styleClass="login-description"
-               text="A comprehensive library management solution for tracking books, managing members, and streamlining borrowing."/>
+        <Button text="Log In" onAction="#onSignIn" styleClass="btn-primary" maxWidth="Infinity"
+                style="-fx-font-size: 14px; -fx-padding: 12;"/>
 
-        <Region prefHeight="40"/>
+        <Region prefHeight="20"/>
+        <Separator/>
+        <Label text="Demo credentials pre-filled" styleClass="login-divider-text"/>
+        <Region prefHeight="10"/>
 
-        <VBox spacing="18">
-            <HBox spacing="14" alignment="CENTER_LEFT">
-                <StackPane styleClass="login-feature-icon"><Text text="&#128214;"/></StackPane>
-                <VBox>
-                    <Label text="10,000+ Books" styleClass="login-feature-title"/>
-                    <Label text="Extensive catalog management" styleClass="login-feature-subtitle"/>
-                </VBox>
-            </HBox>
-            <HBox spacing="14" alignment="CENTER_LEFT">
-                <StackPane styleClass="login-feature-icon"><Text text="&#128101;"/></StackPane>
-                <VBox>
-                    <Label text="Member Portal" styleClass="login-feature-title"/>
-                    <Label text="Easy member registration &amp; tracking" styleClass="login-feature-subtitle"/>
-                </VBox>
-            </HBox>
-            <HBox spacing="14" alignment="CENTER_LEFT">
-                <StackPane styleClass="login-feature-icon"><Text text="&#128202;"/></StackPane>
-                <VBox>
-                    <Label text="Smart Reports" styleClass="login-feature-title"/>
-                    <Label text="Detailed analytics &amp; insights" styleClass="login-feature-subtitle"/>
-                </VBox>
-            </HBox>
+        <VBox styleClass="login-demo-box" spacing="4">
+            <Label text="Admin Access" styleClass="login-demo-title"/>
+            <Label text="Email: admin@library.com · Password: password" styleClass="login-demo-text" wrapText="true"/>
         </VBox>
 
-        <Region VBox.vgrow="ALWAYS"/>
-        <Label text="© 2026 LibraryMS. All rights reserved." styleClass="login-copyright"/>
+        <Label fx:id="errorLabel" styleClass="login-error-text" visible="false" managed="false"/>
     </VBox>
-
-    <!-- Right login form panel -->
-    <VBox styleClass="login-right-panel" alignment="CENTER" HBox.hgrow="ALWAYS">
-        <VBox maxWidth="440" spacing="6">
-            <Label text="Welcome back" styleClass="login-form-title"/>
-            <Label text="Sign in to your library dashboard" styleClass="login-form-subtitle"/>
-
-            <Region prefHeight="30"/>
-
-            <Label text="Email Address" styleClass="login-field-label"/>
-            <TextField fx:id="emailField" text="admin@library.com" styleClass="login-input"/>
-
-            <Region prefHeight="16"/>
-
-            <HBox alignment="CENTER_LEFT">
-                <Label text="Password" styleClass="login-field-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                <Hyperlink text="Forgot password?" styleClass="login-forgot-link"/>
-            </HBox>
-            <PasswordField fx:id="passwordField" text="password" styleClass="login-input"/>
-
-            <Region prefHeight="12"/>
-
-            <CheckBox fx:id="rememberMeCheck" text="Remember me for 30 days" selected="true" styleClass="login-checkbox"/>
-
-            <Region prefHeight="20"/>
-
-            <Button text="Sign In" onAction="#onSignIn" styleClass="btn-primary" maxWidth="Infinity"
-                    style="-fx-font-size: 14px; -fx-padding: 12;"/>
-
-            <Region prefHeight="20"/>
-            <Separator/>
-            <Label text="Demo credentials pre-filled" styleClass="login-divider-text"/>
-            <Region prefHeight="10"/>
-
-            <VBox styleClass="login-demo-box" spacing="4">
-                <Label text="Admin Access" styleClass="login-demo-title"/>
-                <Label text="Email: admin@library.com · Password: password" styleClass="login-demo-text" wrapText="true"/>
-            </VBox>
-
-            <Label fx:id="errorLabel" styleClass="login-error-text" visible="false" managed="false"/>
-        </VBox>
-    </VBox>
-
-</HBox>
+</StackPane>

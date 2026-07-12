@@ -37,17 +37,21 @@ public class BookRepository {
                 "type TEXT NOT NULL CHECK(type IN ('PHYSICAL','EBOOK')), " +
                 "total_copies INTEGER NOT NULL DEFAULT 0, " +
                 "available_copies INTEGER NOT NULL DEFAULT 0, " +
-                "download_url TEXT" +
+                "download_url TEXT, " +
+                "cover_image TEXT" +
                 ")";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
+            // Add cover_image to existing tables that pre-date this column.
+            try { stmt.execute("ALTER TABLE books ADD COLUMN cover_image TEXT"); }
+            catch (SQLException ignored) { /* column already exists */ }
         }
     }
 
     public Book save(Book book) throws SQLException {
-        String sql = "INSERT INTO books (title, author, isbn, genre, type, total_copies, available_copies, download_url) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO books (title, author, isbn, genre, type, total_copies, available_copies, download_url, cover_image) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -57,6 +61,7 @@ public class BookRepository {
             ps.setString(4, book.getGenre());
             ps.setString(5, book.getType());
             bindTypeSpecificColumns(ps, book);
+            ps.setString(9, book.getCoverImage());
 
             ps.executeUpdate();
 
@@ -71,7 +76,7 @@ public class BookRepository {
 
     public boolean update(Book book) throws SQLException {
         String sql = "UPDATE books SET title = ?, author = ?, isbn = ?, genre = ?, " +
-                "total_copies = ?, available_copies = ?, download_url = ? WHERE id = ?";
+                "total_copies = ?, available_copies = ?, download_url = ?, cover_image = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -80,8 +85,25 @@ public class BookRepository {
             ps.setString(3, book.getIsbn());
             ps.setString(4, book.getGenre());
             bindTypeSpecificColumnsForUpdate(ps, book);
-            ps.setInt(8, book.getId());
+            ps.setString(8, book.getCoverImage());
+            ps.setInt(9, book.getId());
 
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    /**
+     * Updates only the cover_image column, without touching or re-validating
+     * anything else. Used by the "Fetch Missing Covers" batch job so it
+     * doesn't need to re-run full book validation/uniqueness checks just to
+     * attach a cover path.
+     */
+    public boolean updateCoverImage(int bookId, String coverImage) throws SQLException {
+        String sql = "UPDATE books SET cover_image = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, coverImage);
+            ps.setInt(2, bookId);
             return ps.executeUpdate() > 0;
         }
     }
@@ -194,11 +216,16 @@ public class BookRepository {
         int totalCopies = rs.getInt("total_copies");
         int availableCopies = rs.getInt("available_copies");
         String downloadUrl = rs.getString("download_url");
+        String coverImage = rs.getString("cover_image");
 
+        Book book;
         if ("EBOOK".equals(type)) {
             int activeLoans = totalCopies - availableCopies;
-            return new EBook(id, title, author, isbn, genre, downloadUrl, totalCopies, activeLoans);
+            book = new EBook(id, title, author, isbn, genre, downloadUrl, totalCopies, activeLoans);
+        } else {
+            book = new PhysicalBook(id, title, author, isbn, genre, totalCopies, availableCopies);
         }
-        return new PhysicalBook(id, title, author, isbn, genre, totalCopies, availableCopies);
+        book.setCoverImage(coverImage);
+        return book;
     }
 }

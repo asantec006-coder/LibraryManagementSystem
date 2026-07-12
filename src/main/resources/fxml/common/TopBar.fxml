@@ -21,20 +21,18 @@
 
     <Region HBox.hgrow="ALWAYS"/>
 
-    <TextField fx:id="searchField" promptText="Search books, members..." styleClass="topbar-search"/>
+    <TextField fx:id="searchField" promptText="Search books, members..." styleClass="topbar-search"
+               onAction="#onSearch"/>
 
     <StackPane styleClass="topbar-icon-btn">
         <Label text="&#128276;" style="-fx-font-size: 14px;"/>
-        <StackPane styleClass="topbar-badge" StackPane.alignment="TOP_RIGHT">
-            <Label text="4" style="-fx-text-fill: white; -fx-font-size: 9px; -fx-font-weight: bold;"/>
-        </StackPane>
     </StackPane>
 
     <HBox spacing="8" alignment="CENTER_LEFT">
         <StackPane styleClass="topbar-avatar">
-            <Label text="AL" styleClass="topbar-avatar-text"/>
+            <Label fx:id="topbarUserInitials" text="AL" styleClass="topbar-avatar-text"/>
         </StackPane>
-        <Label text="Admin" styleClass="topbar-username"/>
+        <Label fx:id="topbarUserName" text="Admin" styleClass="topbar-username"/>
     </HBox>
 
 </HBox>

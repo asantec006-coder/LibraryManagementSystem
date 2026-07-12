@@ -1,8 +1,14 @@
 package com.library.controller.common;
 
+import com.library.model.AdminUser;
+import com.library.service.AnalyticsService;
 import com.library.util.Navigator;
+import com.library.util.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+import java.sql.SQLException;
 
 /**
  * Controller for the shared Sidebar.fxml. Each page calls setActive(...)
@@ -19,7 +25,55 @@ public class SidebarController {
     @FXML private Button reportsBtn;
     @FXML private Button settingsBtn;
 
+    @FXML private Label returnBadge;
+
+    @FXML private Label sidebarUserInitials;
+    @FXML private Label sidebarUserName;
+    @FXML private Label sidebarUserEmail;
+
     public enum NavItem { DASHBOARD, BOOKS, MEMBERS, ONLINE_LIBRARY, BORROW, RETURN, REPORTS, SETTINGS }
+
+    @FXML
+    public void initialize() {
+        showCurrentUser();
+
+        // "Return Book" badge = how many loans are currently out (i.e. waiting
+        // to be returned) — a real, live count, not a fixed placeholder number.
+        try {
+            long activeLoans = new AnalyticsService().getDashboardMetrics().activeLoans();
+            if (activeLoans > 0) {
+                returnBadge.setText(activeLoans > 99 ? "99+" : String.valueOf(activeLoans));
+                returnBadge.setVisible(true);
+                returnBadge.setManaged(true);
+            }
+        } catch (SQLException e) {
+            // Leave the badge hidden if we can't reach the database yet.
+        }
+    }
+
+    private void showCurrentUser() {
+        AdminUser user = Session.getCurrentUser();
+        if (user == null) {
+            return; // shouldn't happen (sidebar only shows on post-login screens), but don't crash if it does
+        }
+        String name = (user.getFullName() == null || user.getFullName().isBlank())
+                ? user.getUsername() : user.getFullName();
+        sidebarUserName.setText(name);
+        sidebarUserEmail.setText(user.getUsername());
+        sidebarUserInitials.setText(initialsOf(name));
+    }
+
+    private String initialsOf(String name) {
+        String[] parts = name.trim().split("\\s+");
+        if (parts.length == 0 || parts[0].isEmpty()) {
+            return "?";
+        }
+        String initials = String.valueOf(parts[0].charAt(0));
+        if (parts.length > 1 && !parts[parts.length - 1].isEmpty()) {
+            initials += parts[parts.length - 1].charAt(0);
+        }
+        return initials.toUpperCase();
+    }
 
     /**
      * Highlights the nav item matching the currently displayed page.
@@ -58,6 +112,7 @@ public class SidebarController {
 
     @FXML
     private void logout() {
+        Session.clear();
         Navigator.goTo("/fxml/Login.fxml");
     }
 }

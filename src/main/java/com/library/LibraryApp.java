@@ -3,8 +3,10 @@ package com.library;
 import com.library.repository.AdminUserRepository;
 import com.library.repository.BookRepository;
 import com.library.repository.DownloadedBookRepository;
+import com.library.repository.LibrarySettingsRepository;
 import com.library.repository.LoanRepository;
 import com.library.repository.MemberRepository;
+import com.library.service.cover.ImageCacheManager;
 import com.library.util.Navigator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -68,6 +70,8 @@ public class LibraryApp extends Application {
         new LoanRepository().createTableIfNotExists();
         new AdminUserRepository().createTableIfNotExists();
         new DownloadedBookRepository().createTableIfNotExists();
+        new LibrarySettingsRepository().createTableIfNotExists();
+        new ImageCacheManager().init();
     }
 
     public static void main(String[] args) {

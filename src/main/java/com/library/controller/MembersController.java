@@ -13,16 +13,25 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import com.library.model.Loan;
 import com.library.model.Member;
 import com.library.service.MemberService;
 import com.library.repository.MemberRepository;
+import com.library.repository.LoanRepository;
+import com.library.repository.BookRepository;
+import com.library.service.AnalyticsService;
+import com.library.service.BookService;
+import com.library.service.LoanService;
+import com.library.util.PendingSearch;
 
 /**
- * Controller for Members.fxml. Visual/static prototype using mock data.
- * When the Members Module (MemberRepository/MemberService) is wired,
- * replace loadMockMembers() with memberService.getAllMembers() and adapt
- * MemberRow to wrap the real Member model instead.
+ * Controller for Members.fxml. Backed by real data via MemberService and
+ * AnalyticsService — no mock/sample data. Table and stat cards reload
+ * from the database after every add/edit/delete.
  */
 public class MembersController {
 
@@ -48,7 +57,28 @@ public class MembersController {
     @FXML
     private TableColumn<MemberRow, MemberRow> actionsColumn;
 
+    @FXML
+    private Label totalMembersLabel;
+    @FXML
+    private Label activeMembersLabel;
+    @FXML
+    private Label booksOutLabel;
+    @FXML
+    private Label newThisMonthLabel;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ComboBox<String> filterCombo;
+
     private MemberService memberService;
+    private AnalyticsService analyticsService;
+    private LoanService loanService;
+
+    /** Full, unfiltered member list from the last reload — filtering re-slices this instead of re-querying. */
+    private List<Member> allMembers = List.of();
+    /** memberId -> number of currently-active (unreturned) loans, computed once per reload. */
+    private Map<Integer, Long> activeLoanCountByMember = Map.of();
 
     private record MemberRow(String id, String name, String email, String phone, String joined,
             int borrowed, String type, String status, String avatarStyleClass, Member originalMember) {
@@ -62,8 +92,13 @@ public class MembersController {
         memberTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         memberService = new MemberService(new MemberRepository());
+        analyticsService = new AnalyticsService();
+        loanService = new LoanService(new LoanRepository(), new BookService(new BookRepository()), memberService);
 
-        loadMembersFromDatabase();
+        filterCombo.setItems(FXCollections.observableArrayList("All", Member.TYPE_STANDARD, Member.TYPE_PREMIUM));
+        filterCombo.setValue("All");
+        filterCombo.valueProperty().addListener((obs, oldVal, newVal) -> applyFilter());
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilter());
 
         memberColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue()));
         memberColumn.setCellFactory(col -> memberCell());
@@ -85,27 +120,87 @@ public class MembersController {
 
         actionsColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue()));
         actionsColumn.setCellFactory(col -> actionsCell());
+
+        loadMembersFromDatabase();
+
+        String pendingQuery = PendingSearch.consumeIfFor(PendingSearch.Target.MEMBERS);
+        if (pendingQuery != null) {
+            searchField.setText(pendingQuery);
+        }
     }
 
     private void loadMembersFromDatabase() {
         try {
             List<Member> realMembers = memberService.getAllMembers();
-            List<MemberRow> rows = realMembers.stream().map(this::mapToRow).toList();
+
+            Map<Integer, Long> loanCounts;
+            try {
+                loanCounts = loanService.getAllLoans().stream()
+                        .filter(l -> !l.isReturned())
+                        .collect(Collectors.groupingBy(Loan::getMemberId, Collectors.counting()));
+            } catch (SQLException e) {
+                loanCounts = Map.of();
+            }
+
+            long activeCount = realMembers.stream().filter(m -> Member.STATUS_ACTIVE.equals(m.getStatus())).count();
+            LocalDate now = LocalDate.now();
+            long newThisMonth = realMembers.stream()
+                    .filter(m -> m.getJoinDate() != null
+                            && m.getJoinDate().getYear() == now.getYear()
+                            && m.getJoinDate().getMonth() == now.getMonth())
+                    .count();
+
+            long booksOut;
+            try {
+                // Source of truth for "currently out" is the loans table itself,
+                // not the (unmaintained) booksBorrowed counter on Member.
+                booksOut = analyticsService.getDashboardMetrics().activeLoans();
+            } catch (SQLException e) {
+                booksOut = 0;
+            }
+
+            final Map<Integer, Long> loanCountsFinal = loanCounts;
+            final long booksOutFinal = booksOut;
+
             Platform.runLater(() -> {
-                memberTable.setItems(FXCollections.observableArrayList(rows));
+                allMembers = realMembers;
+                activeLoanCountByMember = loanCountsFinal;
+                applyFilter();
+                totalMembersLabel.setText(String.valueOf(realMembers.size()));
+                activeMembersLabel.setText(String.valueOf(activeCount));
+                booksOutLabel.setText(String.valueOf(booksOutFinal));
+                newThisMonthLabel.setText(String.valueOf(newThisMonth));
             });
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    private void applyFilter() {
+        String keyword = searchField.getText() == null ? "" : searchField.getText().trim().toLowerCase();
+        String type = filterCombo.getValue() == null ? "All" : filterCombo.getValue();
+
+        List<MemberRow> rows = allMembers.stream()
+                .filter(m -> keyword.isEmpty()
+                        || m.getName().toLowerCase().contains(keyword)
+                        || m.getEmail().toLowerCase().contains(keyword)
+                        || (m.getPhone() != null && m.getPhone().toLowerCase().contains(keyword))
+                        || (m.getStudentId() != null && m.getStudentId().toLowerCase().contains(keyword)))
+                .filter(m -> "All".equals(type) || type.equals(m.getMembershipType()))
+                .map(this::mapToRow)
+                .toList();
+
+        memberTable.setItems(FXCollections.observableArrayList(rows));
+    }
+
     private MemberRow mapToRow(Member m) {
         String[] colors = { "avatar-blue", "avatar-purple", "avatar-green", "avatar-orange", "avatar-red",
                 "avatar-cyan", "avatar-indigo", "avatar-teal" };
         String avatar = colors[m.getId() % colors.length];
+        int borrowed = activeLoanCountByMember.getOrDefault(m.getId(), 0L).intValue();
         return new MemberRow("M" + String.format("%03d", m.getId()), m.getName(), m.getEmail(),
                 m.getPhone() == null ? "" : m.getPhone(),
-                m.getJoinDate() != null ? m.getJoinDate().toString() : "", m.getBooksBorrowed(), m.getMembershipType(),
+                m.getJoinDate() != null ? m.getJoinDate().toString() : "", borrowed, m.getMembershipType(),
                 m.getStatus(), avatar, m);
     }
 
@@ -132,6 +227,13 @@ public class MembersController {
                 Label id = new Label(row.id());
                 id.getStyleClass().add("member-id");
                 VBox textBox = new VBox(name, id);
+
+                String studentId = row.originalMember().getStudentId();
+                if (studentId != null && !studentId.isBlank()) {
+                    Label studentIdLabel = new Label("Student ID: " + studentId);
+                    studentIdLabel.getStyleClass().add("member-id");
+                    textBox.getChildren().add(studentIdLabel);
+                }
 
                 setGraphic(new HBox(10, avatar, textBox));
             }

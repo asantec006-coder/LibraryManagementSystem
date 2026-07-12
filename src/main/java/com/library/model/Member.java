@@ -18,6 +18,7 @@ public class Member {
     private String name;
     private String email;
     private String phone;
+    private String studentId;
     private LocalDate joinDate;
     private int booksBorrowed;
     private String membershipType;
@@ -28,10 +29,16 @@ public class Member {
 
     public Member(int id, String name, String email, String phone, LocalDate joinDate,
                   int booksBorrowed, String membershipType, String status) {
+        this(id, name, email, phone, null, joinDate, booksBorrowed, membershipType, status);
+    }
+
+    public Member(int id, String name, String email, String phone, String studentId, LocalDate joinDate,
+                  int booksBorrowed, String membershipType, String status) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.studentId = studentId;
         this.joinDate = joinDate;
         this.booksBorrowed = booksBorrowed;
         this.membershipType = membershipType;
@@ -68,6 +75,14 @@ public class Member {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public LocalDate getJoinDate() {

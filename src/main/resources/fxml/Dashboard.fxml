@@ -30,8 +30,6 @@
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
                         <HBox alignment="CENTER_LEFT">
                             <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128218;"/></StackPane>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="↗ +124 this month" styleClass="trend-up"/>
                         </HBox>
                         <Label fx:id="totalBooksLabel" text="0" styleClass="stat-value"/>
                         <Label text="Total Books" styleClass="stat-label"/>
@@ -40,8 +38,6 @@
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
                         <HBox alignment="CENTER_LEFT">
                             <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#128101;"/></StackPane>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="↗ +48 this month" styleClass="trend-up"/>
                         </HBox>
                         <Label fx:id="activeMembersLabel" text="0" styleClass="stat-value"/>
                         <Label text="Active Members" styleClass="stat-label"/>
@@ -50,8 +46,6 @@
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
                         <HBox alignment="CENTER_LEFT">
                             <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128209;"/></StackPane>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="↗ +62 this month" styleClass="trend-up"/>
                         </HBox>
                         <Label fx:id="borrowedBooksLabel" text="0" styleClass="stat-value"/>
                         <Label text="Books Borrowed" styleClass="stat-label"/>
@@ -60,8 +54,6 @@
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="14">
                         <HBox alignment="CENTER_LEFT">
                             <StackPane styleClass="stat-icon-box stat-icon-red"><Text text="&#9888;"/></StackPane>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="↘ -5 this month" styleClass="trend-down"/>
                         </HBox>
                         <Label fx:id="overdueBooksLabel" text="0" styleClass="stat-value"/>
                         <Label text="Overdue Books" styleClass="stat-label"/>
@@ -94,6 +86,15 @@
                         </VBox>
                     </VBox>
                 </HBox>
+
+                <!-- Recently added books -->
+                <VBox styleClass="content-card" spacing="14">
+                    <Label text="Recently Added Books" styleClass="section-title"/>
+                    <Label text="Latest additions to the catalog" styleClass="section-subtitle"/>
+                    <HBox fx:id="recentBooksBox" spacing="16">
+                        <VBox.margin><Insets top="10"/></VBox.margin>
+                    </HBox>
+                </VBox>
             </VBox>
         </ScrollPane>
     </VBox>
