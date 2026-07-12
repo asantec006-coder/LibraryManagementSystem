@@ -43,7 +43,7 @@
                             <Label text="Returned Today" styleClass="stat-label"/>
                         </VBox>
                         <VBox styleClass="stat-card" spacing="6" GridPane.rowIndex="1" GridPane.columnIndex="1">
-                            <Label fx:id="finesLabel" text="$0.00" styleClass="stat-value" style="-fx-text-fill: #d97706;"/>
+                            <Label fx:id="finesLabel" text="\$0.00" styleClass="stat-value" style="-fx-text-fill: #d97706;"/>
                             <Label text="Fines Collected" styleClass="stat-label"/>
                         </VBox>
                     </GridPane>

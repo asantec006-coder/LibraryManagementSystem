@@ -26,6 +26,9 @@
 
     <StackPane styleClass="topbar-icon-btn">
         <Label text="&#128276;" style="-fx-font-size: 14px;"/>
+        <StackPane styleClass="topbar-badge" StackPane.alignment="TOP_RIGHT">
+            <Label text="4" style="-fx-text-fill: white; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+        </StackPane>
     </StackPane>
 
     <HBox spacing="8" alignment="CENTER_LEFT">

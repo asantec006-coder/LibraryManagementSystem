@@ -55,7 +55,7 @@
                     </VBox>
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10">
                         <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#9888;"/></StackPane>
-                        <Label fx:id="outstandingFinesLabel" text="$0.00" styleClass="stat-value"/>
+                        <Label fx:id="outstandingFinesLabel" text="\$0.00" styleClass="stat-value"/>
                         <Label text="Estimated Fines Due" styleClass="stat-label"/>
                         <Label text="Based on current overdue loans" styleClass="stat-sublabel"/>
                     </VBox>
