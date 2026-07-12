@@ -2,10 +2,14 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
@@ -35,6 +39,8 @@
                 </VBox>
 
                 <VBox spacing="20" HBox.hgrow="ALWAYS">
+
+                    <!-- ============ GENERAL PANEL ============ -->
                     <VBox fx:id="generalPanel" spacing="20">
                         <VBox styleClass="content-card" spacing="14">
                             <HBox spacing="12" alignment="CENTER_LEFT">
@@ -78,41 +84,267 @@
                         </VBox>
                     </VBox>
 
-                    <VBox fx:id="notificationsPanel" styleClass="content-card" spacing="14" visible="false" managed="false">
-                        <HBox spacing="12" alignment="CENTER_LEFT">
-                            <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#128276;"/></StackPane>
-                            <VBox>
-                                <Label text="Notifications" styleClass="section-title"/>
-                                <Label text="Email and in-app alert preferences" styleClass="section-subtitle"/>
-                            </VBox>
+                    <!-- ============ NOTIFICATIONS PANEL ============ -->
+                    <VBox fx:id="notificationsPanel" spacing="20" visible="false" managed="false">
+
+                        <!-- Email Notifications Card -->
+                        <VBox styleClass="content-card" spacing="14">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#128276;"/></StackPane>
+                                <VBox>
+                                    <Label text="Email Notifications" styleClass="section-title"/>
+                                    <Label text="Choose which events trigger email alerts" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="notifOverdueBooks" text="Overdue Book Reminders" selected="true"
+                                          styleClass="settings-checkbox"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Daily" styleClass="badge badge-blue"/>
+                            </HBox>
+                            <Label text="Send email reminders when borrowed books are past their due date"
+                                   wrapText="true" styleClass="settings-description"
+                                   style="-fx-padding: 0 0 0 24;"/>
+
+                            <Separator style="-fx-opacity: 0.4;"/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="notifNewBooks" text="New Book Arrivals" selected="true"
+                                          styleClass="settings-checkbox"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Weekly" styleClass="badge badge-green"/>
+                            </HBox>
+                            <Label text="Notify members when new books are added to the library collection"
+                                   wrapText="true" styleClass="settings-description"
+                                   style="-fx-padding: 0 0 0 24;"/>
+
+                            <Separator style="-fx-opacity: 0.4;"/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="notifMemberExpiry" text="Membership Expiry Alerts" selected="true"
+                                          styleClass="settings-checkbox"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="7 days before" styleClass="badge badge-amber"/>
+                            </HBox>
+                            <Label text="Alert members when their membership is about to expire"
+                                   wrapText="true" styleClass="settings-description"
+                                   style="-fx-padding: 0 0 0 24;"/>
+
+                            <Separator style="-fx-opacity: 0.4;"/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="notifReturnReminder" text="Return Date Reminders" selected="false"
+                                          styleClass="settings-checkbox"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="2 days before" styleClass="badge badge-gray"/>
+                            </HBox>
+                            <Label text="Send a reminder before the book return due date"
+                                   wrapText="true" styleClass="settings-description"
+                                   style="-fx-padding: 0 0 0 24;"/>
+                        </VBox>
+
+                        <!-- System Notifications Card -->
+                        <VBox styleClass="content-card" spacing="14">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128225;"/></StackPane>
+                                <VBox>
+                                    <Label text="System Notifications" styleClass="section-title"/>
+                                    <Label text="In-app alert preferences for administrators" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="notifLowStock" text="Low Stock Alerts" selected="true"
+                                          styleClass="settings-checkbox"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="When copies &lt; 3" styleClass="badge badge-red"/>
+                            </HBox>
+                            <Label text="Alert when any book's available copies drop below the threshold"
+                                   wrapText="true" styleClass="settings-description"
+                                   style="-fx-padding: 0 0 0 24;"/>
+
+                            <Separator style="-fx-opacity: 0.4;"/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="notifSystemUpdates" text="System Maintenance Notices" selected="true"
+                                          styleClass="settings-checkbox"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="As needed" styleClass="badge badge-gray"/>
+                            </HBox>
+                            <Label text="Receive notifications about scheduled maintenance and system updates"
+                                   wrapText="true" styleClass="settings-description"
+                                   style="-fx-padding: 0 0 0 24;"/>
+                        </VBox>
+
+                        <HBox spacing="12">
+                            <Button text="Save Preferences" onAction="#onSaveNotifications" styleClass="btn-primary"/>
+                            <Button text="Reset to Defaults" onAction="#onResetNotifications" styleClass="btn-secondary"/>
                         </HBox>
-                        <Label text="Notification preferences aren't built yet — this tab is a placeholder for that feature."
-                               wrapText="true" styleClass="section-subtitle"/>
                     </VBox>
 
-                    <VBox fx:id="securityPanel" styleClass="content-card" spacing="14" visible="false" managed="false">
-                        <HBox spacing="12" alignment="CENTER_LEFT">
-                            <StackPane styleClass="stat-icon-box stat-icon-red"><Text text="&#128274;"/></StackPane>
-                            <VBox>
-                                <Label text="Security" styleClass="section-title"/>
-                                <Label text="Password and account access" styleClass="section-subtitle"/>
-                            </VBox>
-                        </HBox>
-                        <Label text="Password change and account security controls aren't built yet — this tab is a placeholder for that feature."
-                               wrapText="true" styleClass="section-subtitle"/>
+                    <!-- ============ SECURITY PANEL ============ -->
+                    <VBox fx:id="securityPanel" spacing="20" visible="false" managed="false">
+
+                        <!-- Change Password Card -->
+                        <VBox styleClass="content-card" spacing="14">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-red"><Text text="&#128274;"/></StackPane>
+                                <VBox>
+                                    <Label text="Change Password" styleClass="section-title"/>
+                                    <Label text="Update your account password" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <Label text="Current Password" styleClass="form-label"/>
+                            <PasswordField fx:id="currentPasswordField" promptText="Enter your current password"/>
+
+                            <Label text="New Password" styleClass="form-label"/>
+                            <PasswordField fx:id="newPasswordField" promptText="Enter a new password (min 6 characters)"/>
+
+                            <Label text="Confirm New Password" styleClass="form-label"/>
+                            <PasswordField fx:id="confirmPasswordField" promptText="Re-enter the new password"/>
+
+                            <Label fx:id="passwordStrengthLabel" text="" styleClass="settings-description"/>
+
+                            <Button text="Update Password" onAction="#onChangePassword" styleClass="btn-primary"/>
+                        </VBox>
+
+                        <!-- Password Requirements Card -->
+                        <VBox styleClass="content-card" spacing="14">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-blue"><Text text="&#128737;"/></StackPane>
+                                <VBox>
+                                    <Label text="Password Requirements" styleClass="section-title"/>
+                                    <Label text="Your password must meet these criteria" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="&#10003;" style="-fx-text-fill: #16a34a; -fx-font-weight: bold;"/>
+                                <Label text="Minimum 6 characters long" styleClass="settings-description"/>
+                            </HBox>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="&#10003;" style="-fx-text-fill: #16a34a; -fx-font-weight: bold;"/>
+                                <Label text="Should not be the same as the current password" styleClass="settings-description"/>
+                            </HBox>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="&#10003;" style="-fx-text-fill: #16a34a; -fx-font-weight: bold;"/>
+                                <Label text="Passwords are stored securely with bcrypt hashing" styleClass="settings-description"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Account Info Card -->
+                        <VBox styleClass="content-card" spacing="14">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-purple"><Text text="&#128100;"/></StackPane>
+                                <VBox>
+                                    <Label text="Account Profile" styleClass="section-title"/>
+                                    <Label text="Update your display name" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <Label text="Username (read-only)" styleClass="form-label"/>
+                            <TextField fx:id="usernameDisplayField" editable="false"
+                                       style="-fx-background-color: #f5f6fa; -fx-text-fill: #6b7280;"/>
+
+                            <Label text="Full Name" styleClass="form-label"/>
+                            <TextField fx:id="fullNameField" promptText="e.g. Admin Librarian"/>
+
+                            <Button text="Update Profile" onAction="#onUpdateProfile" styleClass="btn-primary"/>
+                        </VBox>
                     </VBox>
 
-                    <VBox fx:id="backupPanel" styleClass="content-card" spacing="14" visible="false" managed="false">
-                        <HBox spacing="12" alignment="CENTER_LEFT">
-                            <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#128190;"/></StackPane>
-                            <VBox>
-                                <Label text="Backup" styleClass="section-title"/>
-                                <Label text="Database export and restore" styleClass="section-subtitle"/>
-                            </VBox>
-                        </HBox>
-                        <Label text="Database backup/restore isn't built yet — this tab is a placeholder for that feature."
-                               wrapText="true" styleClass="section-subtitle"/>
+                    <!-- ============ BACKUP PANEL ============ -->
+                    <VBox fx:id="backupPanel" spacing="20" visible="false" managed="false">
+
+                        <!-- Export Card -->
+                        <VBox styleClass="content-card" spacing="14">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-green"><Text text="&#128190;"/></StackPane>
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label text="Export Database" styleClass="section-title"/>
+                                    <Label text="Create a backup copy of your entire library database" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <HBox spacing="20">
+                                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="6">
+                                    <Label fx:id="dbSizeLabel" text="--" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                                    <Label text="Database Size" styleClass="stat-label"/>
+                                </VBox>
+                                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="6">
+                                    <Label fx:id="lastBackupLabel" text="Never" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                                    <Label text="Last Backup" styleClass="stat-label"/>
+                                </VBox>
+                                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="6">
+                                    <Label fx:id="totalRecordsLabel" text="--" styleClass="stat-value" style="-fx-font-size: 20px;"/>
+                                    <Label text="Total Records" styleClass="stat-label"/>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="12">
+                                <Button text="&#128229; Export as SQL" onAction="#onExportSQL" styleClass="btn-primary"/>
+                                <Button text="&#128196; Export as CSV" onAction="#onExportCSV" styleClass="btn-secondary"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Import / Restore Card -->
+                        <VBox styleClass="content-card" spacing="14">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-amber"><Text text="&#128259;"/></StackPane>
+                                <VBox>
+                                    <Label text="Restore Database" styleClass="section-title"/>
+                                    <Label text="Restore from a previously exported backup file" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <Label text="Select a .db backup file to restore your library data. This will replace all current data."
+                                   wrapText="true" styleClass="settings-description"/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <Button text="&#128194; Choose Backup File..." onAction="#onRestoreBackup" styleClass="btn-secondary"/>
+                                <Label fx:id="restoreFileLabel" text="No file selected" styleClass="settings-description"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Danger Zone Card -->
+                        <VBox styleClass="content-card" spacing="14" style="-fx-border-color: #fca5a5;">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="stat-icon-box stat-icon-red"><Text text="&#9888;"/></StackPane>
+                                <VBox>
+                                    <Label text="Danger Zone" styleClass="section-title" style="-fx-text-fill: #dc2626;"/>
+                                    <Label text="Irreversible database actions" styleClass="section-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <HBox spacing="20" alignment="CENTER_LEFT">
+                                <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                    <Label text="Reset Database" style="-fx-font-weight: bold; -fx-text-fill: #111827;"/>
+                                    <Label text="Delete all books, members, and loan records. This cannot be undone."
+                                           wrapText="true" styleClass="settings-description"/>
+                                </VBox>
+                                <Button text="Reset All Data" onAction="#onResetDatabase" styleClass="btn-danger"/>
+                            </HBox>
+                        </VBox>
                     </VBox>
+
                 </VBox>
             </HBox>
         </ScrollPane>

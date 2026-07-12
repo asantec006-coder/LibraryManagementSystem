@@ -21,3 +21,42 @@
 .settings-tab-active:hover {
     -fx-background-color: #eff6ff;
 }
+
+/* ── Checkbox styling ─────────────────────────────────── */
+.settings-checkbox {
+    -fx-font-size: 13px;
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.settings-checkbox .box {
+    -fx-background-color: white;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-pref-width: 18px;
+    -fx-pref-height: 18px;
+}
+
+.settings-checkbox:selected .box {
+    -fx-background-color: #2563eb;
+    -fx-border-color: #2563eb;
+}
+
+.settings-checkbox:selected .box .mark {
+    -fx-background-color: white;
+}
+
+/* ── Description text ─────────────────────────────────── */
+.settings-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
+
+/* ── Form labels ──────────────────────────────────────── */
+.form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}

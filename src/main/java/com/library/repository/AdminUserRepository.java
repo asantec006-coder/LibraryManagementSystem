@@ -84,6 +84,26 @@ public class AdminUserRepository {
         return Optional.empty();
     }
 
+    public void updatePassword(int userId, String newPasswordHash) throws SQLException {
+        String sql = "UPDATE admin_users SET password_hash = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newPasswordHash);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        }
+    }
+
+    public void updateFullName(int userId, String fullName) throws SQLException {
+        String sql = "UPDATE admin_users SET full_name = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, fullName);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        }
+    }
+
     private AdminUser mapRow(ResultSet rs) throws SQLException {
         return new AdminUser(
                 rs.getInt("id"),
