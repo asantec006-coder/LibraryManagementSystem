@@ -128,13 +128,7 @@ public class LoanRepository {
         return list;
     }
 
-    private int countWhere(String clause) throws SQLException {
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM loans " + clause)) {
-            return rs.next() ? rs.getInt(1) : 0;
-        }
-    }
+
 
     private Loan map(ResultSet rs) throws SQLException {
         Loan loan = new Loan();

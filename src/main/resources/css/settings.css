@@ -1,39 +1,53 @@
 .settings-tab {
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-text-fill: #374151;
     -fx-font-size: 13px;
+    font-size: 13px;
     -fx-alignment: center-left;
     -fx-padding: 10 14 10 14;
+    padding: 10px 14px 10px 14px;
     -fx-background-radius: 8px;
     -fx-cursor: hand;
+    cursor: pointer;
 }
 
 .settings-tab:hover {
     -fx-background-color: #f3f4f6;
+    background-color: #f3f4f6;
 }
 
 .settings-tab-active {
     -fx-background-color: #eff6ff;
+    background-color: #eff6ff;
     -fx-text-fill: #2563eb;
     -fx-font-weight: bold;
+    font-weight: bold;
 }
 
 .settings-tab-active:hover {
     -fx-background-color: #eff6ff;
+    background-color: #eff6ff;
 }
 
 /* ── Checkbox styling ─────────────────────────────────── */
 .settings-checkbox {
     -fx-font-size: 13px;
+    font-size: 13px;
     -fx-text-fill: #111827;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-cursor: hand;
+    cursor: pointer;
 }
 
 .settings-checkbox .box {
     -fx-background-color: white;
+    background-color: white;
     -fx-border-color: #d1d5db;
+    border-color: #d1d5db;
     -fx-border-radius: 4px;
+    border-radius: 4px;
     -fx-background-radius: 4px;
     -fx-pref-width: 18px;
     -fx-pref-height: 18px;
@@ -41,22 +55,28 @@
 
 .settings-checkbox:selected .box {
     -fx-background-color: #2563eb;
+    background-color: #2563eb;
     -fx-border-color: #2563eb;
+    border-color: #2563eb;
 }
 
 .settings-checkbox:selected .box .mark {
     -fx-background-color: white;
+    background-color: white;
 }
 
 /* ── Description text ─────────────────────────────────── */
 .settings-description {
     -fx-font-size: 12px;
+    font-size: 12px;
     -fx-text-fill: #6b7280;
 }
 
 /* ── Form labels ──────────────────────────────────────── */
 .form-label {
     -fx-font-size: 12px;
+    font-size: 12px;
     -fx-font-weight: bold;
+    font-weight: bold;
     -fx-text-fill: #374151;
 }
