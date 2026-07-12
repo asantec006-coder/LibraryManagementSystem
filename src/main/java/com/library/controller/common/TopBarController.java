@@ -31,7 +31,6 @@ public class TopBarController {
     @FXML private Label titleLabel;
     @FXML private Label subtitleLabel;
     @FXML private TextField searchField;
-    @FXML private Label topbarUserInitials;
     @FXML private Label topbarUserName;
 
     @FXML
@@ -43,19 +42,6 @@ public class TopBarController {
         String name = (user.getFullName() == null || user.getFullName().isBlank())
                 ? user.getUsername() : user.getFullName();
         topbarUserName.setText(name);
-        topbarUserInitials.setText(initialsOf(name));
-    }
-
-    private String initialsOf(String name) {
-        String[] parts = name.trim().split("\\s+");
-        if (parts.length == 0 || parts[0].isEmpty()) {
-            return "?";
-        }
-        String initials = String.valueOf(parts[0].charAt(0));
-        if (parts.length > 1 && !parts[parts.length - 1].isEmpty()) {
-            initials += parts[parts.length - 1].charAt(0);
-        }
-        return initials.toUpperCase();
     }
 
     public void setTitle(String title, String subtitle) {

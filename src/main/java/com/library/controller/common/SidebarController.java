@@ -27,7 +27,6 @@ public class SidebarController {
 
     @FXML private Label returnBadge;
 
-    @FXML private Label sidebarUserInitials;
     @FXML private Label sidebarUserName;
     @FXML private Label sidebarUserEmail;
 
@@ -60,19 +59,6 @@ public class SidebarController {
                 ? user.getUsername() : user.getFullName();
         sidebarUserName.setText(name);
         sidebarUserEmail.setText(user.getUsername());
-        sidebarUserInitials.setText(initialsOf(name));
-    }
-
-    private String initialsOf(String name) {
-        String[] parts = name.trim().split("\\s+");
-        if (parts.length == 0 || parts[0].isEmpty()) {
-            return "?";
-        }
-        String initials = String.valueOf(parts[0].charAt(0));
-        if (parts.length > 1 && !parts[parts.length - 1].isEmpty()) {
-            initials += parts[parts.length - 1].charAt(0);
-        }
-        return initials.toUpperCase();
     }
 
     /**
