@@ -101,7 +101,7 @@
                                     <Text text="&#9888;" style="-fx-fill: white; -fx-font-size: 14px;"/>
                                 </StackPane>
                             </HBox>
-                            <Label fx:id="outstandingFinesLabel" text="\$0.00" styleClass="highlight-card-value"/>
+                            <Label fx:id="outstandingFinesLabel" text="$0.00" styleClass="highlight-card-value"/>
                             <Label fx:id="overdueCountLabel" text="0 overdue loans" styleClass="highlight-card-note"/>
                             <Button text="View Overdue Loans" onAction="#onViewOverdue" styleClass="btn-secondary" maxWidth="Infinity"
                                     style="-fx-background-color: white; -fx-text-fill: #16224a;"/>
