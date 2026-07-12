@@ -77,14 +77,14 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sidebar-footer">
         <StackPane styleClass="sidebar-avatar">
-            <Label fx:id="sidebarUserInitials" text="AL" styleClass="sidebar-avatar-text"/>
+            <Label text="&#128100;" styleClass="sidebar-avatar-text" style="-fx-font-size: 16px;"/>
         </StackPane>
         <VBox HBox.hgrow="ALWAYS">
             <Label fx:id="sidebarUserName" text="Admin Librarian" styleClass="sidebar-user-name"/>
             <Label fx:id="sidebarUserEmail" text="admin@library.com" styleClass="sidebar-user-email"/>
         </VBox>
-        <Button text="&#8674;" styleClass="icon-btn" onAction="#logout"
-                style="-fx-text-fill: #94a3b8; -fx-font-size: 14px;"/>
+        <Button text="&#x23FB;" styleClass="icon-btn" onAction="#logout"
+                style="-fx-text-fill: #ef4444; -fx-font-size: 16px;"/>
     </HBox>
 
 </VBox>

@@ -64,6 +64,11 @@ public class TopBarController {
     }
 
     @FXML
+    private void goToNotifications() {
+        Navigator.goTo("/fxml/Settings.fxml");
+    }
+
+    @FXML
     private void onSearch() {
         String query = searchField.getText() == null ? "" : searchField.getText().trim();
         if (query.isEmpty()) {

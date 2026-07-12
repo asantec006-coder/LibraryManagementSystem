@@ -24,16 +24,17 @@
     <TextField fx:id="searchField" promptText="Search books, members..." styleClass="topbar-search"
                onAction="#onSearch"/>
 
-    <StackPane styleClass="topbar-icon-btn">
+    <StackPane styleClass="topbar-icon-btn" onMouseClicked="#goToNotifications">
         <Label text="&#128276;" style="-fx-font-size: 14px;"/>
         <StackPane styleClass="topbar-badge" StackPane.alignment="TOP_RIGHT">
-            <Label text="4" style="-fx-text-fill: white; -fx-font-size: 9px; -fx-font-weight: bold;"/>
+            <!-- Badge count removed to look cleaner, or can just be a small red dot if preferred, but since they wanted it as a button, let's keep the circle but empty or standard -->
+            <Label text="" style="-fx-text-fill: white; -fx-font-size: 9px; -fx-font-weight: bold;"/>
         </StackPane>
     </StackPane>
 
     <HBox spacing="8" alignment="CENTER_LEFT">
         <StackPane styleClass="topbar-avatar">
-            <Label fx:id="topbarUserInitials" text="AL" styleClass="topbar-avatar-text"/>
+            <Label text="&#128100;" styleClass="topbar-avatar-text" style="-fx-font-size: 16px;"/>
         </StackPane>
         <Label fx:id="topbarUserName" text="Admin" styleClass="topbar-username"/>
     </HBox>
